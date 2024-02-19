@@ -1,0 +1,5 @@
+[{"opcode": "movv", "arg": [0, " "]},
+ {"opcode": "rd", "arg": [0]},
+ {"opcode": "printf", "arg": [0]},
+ {"opcode": "jp", "arg": [1]},
+ {"opcode": "halt"}]

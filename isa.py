@@ -1,0 +1,63 @@
+import json
+from enum import Enum
+from collections import namedtuple
+
+
+class Opcode(str, Enum):
+    OPEN_BRACKET = '('
+    CLOSE_BRACKET = ')'
+    READ = "rd"
+    PRINT = 'print'
+    DEFVAR = "movv"
+    SETQ = "mov"
+    DOTIMES = 'loop'
+    FORMAT = "printf"
+    EQ = "bne"
+    MOD = "mod"
+    COND = "cond"
+    LOOP = "infloop"
+    PLUS = 'add'
+    MINUS = "sub"
+    MUL = "mul"
+    DIV = "div"
+    APOSTROPHE = '\'*\''
+    OR = "or"
+    JP = "jp"
+    HALT = 'halt'
+
+    def __str__(self):
+        return str(self.value)
+
+
+class Term(namedtuple("Term", "pos symbol")):
+    """Описание выражения из исходного текста программы.
+
+        Сделано через класс, чтобы был docstring.
+        """
+
+
+def write_code(filename, code):
+    """Записать машинный код в файл."""
+    with open(filename, "w", encoding="utf-8") as file:
+        buf = []
+        for instr in code:
+            buf.append(json.dumps(instr))
+        file.write("[" + ",\n ".join(buf) + "]")
+
+
+def read_code(filename):
+    """Прочесть машинный код из файла."""
+    with open(filename, encoding="utf-8") as file:
+        code = json.loads(file.read())
+
+    for instr in code:
+        # Конвертация строки в Opcode
+        instr["opcode"] = Opcode(instr["opcode"])
+
+        # Конвертация списка term в класс Term
+        if "term" in instr:
+            assert len(instr["term"]) == 3
+            instr["term"] = Term(instr["term"][0], instr["term"][1], instr["term"][2])
+
+    return code
+
