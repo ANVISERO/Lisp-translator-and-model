@@ -88,8 +88,6 @@ ignore = [
     # to simplify code for non-Python programmers
     "PTH118", # `os.path.join()` should be replaced by `Path` with `/` operator
     "UP032",  # [*] Use f-string instead of `format` call
-
-
 ]
 unfixable = [
     "ERA001", # prohibit to "auto-fix" (=remove) commented-out code
