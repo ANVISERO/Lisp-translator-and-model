@@ -1,29 +1,28 @@
 import json
-from enum import Enum
 from collections import namedtuple
+from enum import Enum
 
 
 class Opcode(str, Enum):
-    OPEN_BRACKET = '('
-    CLOSE_BRACKET = ')'
-    READ = "rd"
-    PRINT = 'print'
+    OPEN_BRACKET = "("
+    CLOSE_BRACKET = ")"
+    READ = "movv"
+    PRINT = "movv"
     DEFVAR = "movv"
     SETQ = "mov"
-    DOTIMES = 'loop'
-    FORMAT = "printf"
+    DOTIMES = "loop"
+    FORMAT = "movv"
     EQ = "bne"
     MOD = "mod"
     COND = "cond"
     LOOP = "infloop"
-    PLUS = 'add'
+    PLUS = "add"
     MINUS = "sub"
     MUL = "mul"
     DIV = "div"
-    APOSTROPHE = '\'*\''
     OR = "or"
     JP = "jp"
-    HALT = 'halt'
+    HALT = "halt"
 
     def __str__(self):
         return str(self.value)
@@ -32,8 +31,8 @@ class Opcode(str, Enum):
 class Term(namedtuple("Term", "pos symbol")):
     """Описание выражения из исходного текста программы.
 
-        Сделано через класс, чтобы был docstring.
-        """
+    Сделано через класс, чтобы был docstring.
+    """
 
 
 def write_code(filename, code):
@@ -60,4 +59,3 @@ def read_code(filename):
             instr["term"] = Term(instr["term"][0], instr["term"][1], instr["term"][2])
 
     return code
-
