@@ -53,6 +53,5 @@ jobs:
       - name: Run tests and collect coverage
         run: |
           poetry run coverage run -m pytest --verbose
-          poetry run coverage report -m
         env:
           CI: true
