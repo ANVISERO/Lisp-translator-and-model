@@ -12,6 +12,7 @@ import translator
 @pytest.mark.golden_test("golden/*.yml")
 def test_translator_and_machine(golden, caplog):
     """
+    `poetry run pytest . -v --update-goldens`
     Вход:
 
     - `in_source` -- исходный код

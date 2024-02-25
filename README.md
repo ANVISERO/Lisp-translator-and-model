@@ -212,3 +212,204 @@
 - Управление симуляцией реализовано в функции `simulate`.
 
 ## Тестирование
+
+Тестирование выполняется при помощи golden test-ов.
+
+Тесты для языка `lisp` реализованы в: [integration_test.py](integration_test.py).
+
+Конфигурации:
+- [cat.yml](golden%2Fcat.yml)
+- [hello.yml](golden%2Fhello.yml)
+- [hello_user_name.yml](golden%2Fhello_user_name.yml)
+
+Запустить тесты: `poetry run pytest . -v`
+
+Обновить конфигурацию golden tests:  `poetry run pytest . -v --update-goldens`
+
+CI при помощи Github Action:
+
+``` yaml
+defaults:
+  run:
+    working-directory: ./python
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+
+      - name: Run tests and collect coverage
+        run: |
+          poetry run coverage run -m pytest .
+          poetry run coverage report -m
+        env:
+          CI: true
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+
+      - name: Check code formatting with Ruff
+        run: poetry run ruff format --check .
+
+      - name: Run Ruff linters
+        run: poetry run ruff check .
+```
+
+где:
+
+- `poetry` -- управления зависимостями для языка программирования Python.
+- `coverage` -- формирование отчёта об уровне покрытия исходного кода.
+- `pytest` -- утилита для запуска тестов.
+- `ruff` -- утилита для форматирования и проверки стиля кодирования.
+
+
+Пример использования и журнал работы процессора на примере `cat`:
+
+``` shell
+$ cat examples/foo.txt
+foo
+$ cat examples/cat.lisp 
+( defvar r )
+( loop
+    ( setq r ( read ) )
+    ( format t r )
+)
+$ python3 translator.py examples/cat.lisp target.out
+source LoC: 19 code instr: 5
+$ cat target.out
+[{"opcode": "movv", "arg": ["$0", " "]},
+ {"opcode": "movv", "arg": ["$0", "$52"]},
+ {"opcode": "movv", "arg": ["$69", "$0"]},
+ {"opcode": "jp", "arg": [1]},
+ {"opcode": "halt"}]
+$ python3 machine.py target.out examples/foo.txt                  
+DEBUG:root:{TICK: 0, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0} movv ['$0', ' ']
+DEBUG:root:{TICK: 1, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0} movv ['$0', ' ']
+DEBUG:root:{TICK: 2, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 32} movv ['$0', ' ']
+DEBUG:root:{TICK: 3, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 32, DR: 32} movv ['$0', ' ']
+DEBUG:root:input: ' '
+DEBUG:root:{TICK: 4, PC: 0, ADDR: 0, MEM_OUT: 32, AC: 32, DR: 32} movv ['$0', ' ']
+DEBUG:root:{TICK: 5, PC: 1, ADDR: 52, MEM_OUT: 102, AC: 32, DR: 32} movv ['$0', '$52']
+DEBUG:root:{TICK: 6, PC: 1, ADDR: 52, MEM_OUT: 102, AC: 32, DR: 102} movv ['$0', '$52']
+DEBUG:root:{TICK: 7, PC: 1, ADDR: 0, MEM_OUT: 32, AC: 32, DR: 102} movv ['$0', '$52']
+DEBUG:root:{TICK: 8, PC: 1, ADDR: 0, MEM_OUT: 32, AC: 32, DR: 102} movv ['$0', '$52']
+DEBUG:root:{TICK: 9, PC: 1, ADDR: 0, MEM_OUT: 32, AC: 102, DR: 102} movv ['$0', '$52']
+DEBUG:root:input: 'f'
+DEBUG:root:{TICK: 10, PC: 1, ADDR: 0, MEM_OUT: 102, AC: 102, DR: 102} movv ['$0', '$52']
+DEBUG:root:{TICK: 11, PC: 2, ADDR: 0, MEM_OUT: 102, AC: 102, DR: 102} movv ['$69', '$0']
+DEBUG:root:{TICK: 12, PC: 2, ADDR: 0, MEM_OUT: 102, AC: 102, DR: 102} movv ['$69', '$0']
+DEBUG:root:{TICK: 13, PC: 2, ADDR: 69, MEM_OUT: 0, AC: 102, DR: 102} movv ['$69', '$0']
+DEBUG:root:{TICK: 14, PC: 2, ADDR: 69, MEM_OUT: 0, AC: 102, DR: 102} movv ['$69', '$0']
+DEBUG:root:{TICK: 15, PC: 2, ADDR: 69, MEM_OUT: 0, AC: 102, DR: 102} movv ['$69', '$0']
+DEBUG:root:output: '' << 'f'
+DEBUG:root:{TICK: 16, PC: 2, ADDR: 69, MEM_OUT: 102, AC: 102, DR: 102} movv ['$69', '$0']
+DEBUG:root:{TICK: 17, PC: 3, ADDR: 69, MEM_OUT: 102, AC: 102, DR: 102} jp [1]
+DEBUG:root:{TICK: 18, PC: 1, ADDR: 69, MEM_OUT: 102, AC: 102, DR: 102} movv ['$0', '$52']
+DEBUG:root:{TICK: 19, PC: 1, ADDR: 53, MEM_OUT: 111, AC: 102, DR: 102} movv ['$0', '$52']
+DEBUG:root:{TICK: 20, PC: 1, ADDR: 53, MEM_OUT: 111, AC: 102, DR: 111} movv ['$0', '$52']
+DEBUG:root:{TICK: 21, PC: 1, ADDR: 0, MEM_OUT: 102, AC: 102, DR: 111} movv ['$0', '$52']
+DEBUG:root:{TICK: 22, PC: 1, ADDR: 0, MEM_OUT: 102, AC: 102, DR: 111} movv ['$0', '$52']
+DEBUG:root:{TICK: 23, PC: 1, ADDR: 0, MEM_OUT: 102, AC: 111, DR: 111} movv ['$0', '$52']
+DEBUG:root:input: 'o'
+DEBUG:root:{TICK: 24, PC: 1, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
+DEBUG:root:{TICK: 25, PC: 2, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$69', '$0']
+DEBUG:root:{TICK: 26, PC: 2, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$69', '$0']
+DEBUG:root:{TICK: 27, PC: 2, ADDR: 70, MEM_OUT: 0, AC: 111, DR: 111} movv ['$69', '$0']
+DEBUG:root:{TICK: 28, PC: 2, ADDR: 70, MEM_OUT: 0, AC: 111, DR: 111} movv ['$69', '$0']
+DEBUG:root:{TICK: 29, PC: 2, ADDR: 70, MEM_OUT: 0, AC: 111, DR: 111} movv ['$69', '$0']
+DEBUG:root:output: 'f' << 'o'
+DEBUG:root:{TICK: 30, PC: 2, ADDR: 70, MEM_OUT: 111, AC: 111, DR: 111} movv ['$69', '$0']
+DEBUG:root:{TICK: 31, PC: 3, ADDR: 70, MEM_OUT: 111, AC: 111, DR: 111} jp [1]
+DEBUG:root:{TICK: 32, PC: 1, ADDR: 70, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
+DEBUG:root:{TICK: 33, PC: 1, ADDR: 54, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
+DEBUG:root:{TICK: 34, PC: 1, ADDR: 54, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
+DEBUG:root:{TICK: 35, PC: 1, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
+DEBUG:root:{TICK: 36, PC: 1, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
+DEBUG:root:{TICK: 37, PC: 1, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
+DEBUG:root:input: 'o'
+DEBUG:root:{TICK: 38, PC: 1, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
+DEBUG:root:{TICK: 39, PC: 2, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$69', '$0']
+DEBUG:root:{TICK: 40, PC: 2, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$69', '$0']
+DEBUG:root:{TICK: 41, PC: 2, ADDR: 71, MEM_OUT: 0, AC: 111, DR: 111} movv ['$69', '$0']
+DEBUG:root:{TICK: 42, PC: 2, ADDR: 71, MEM_OUT: 0, AC: 111, DR: 111} movv ['$69', '$0']
+DEBUG:root:{TICK: 43, PC: 2, ADDR: 71, MEM_OUT: 0, AC: 111, DR: 111} movv ['$69', '$0']
+DEBUG:root:output: 'fo' << 'o'
+DEBUG:root:{TICK: 44, PC: 2, ADDR: 71, MEM_OUT: 111, AC: 111, DR: 111} movv ['$69', '$0']
+DEBUG:root:{TICK: 45, PC: 3, ADDR: 71, MEM_OUT: 111, AC: 111, DR: 111} jp [1]
+DEBUG:root:{TICK: 46, PC: 1, ADDR: 71, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
+DEBUG:root:{TICK: 47, PC: 1, ADDR: 55, MEM_OUT: 0, AC: 111, DR: 111} movv ['$0', '$52']
+DEBUG:root:{TICK: 48, PC: 1, ADDR: 55, MEM_OUT: 0, AC: 111, DR: 0} movv ['$0', '$52']
+DEBUG:root:{TICK: 49, PC: 1, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 0} movv ['$0', '$52']
+DEBUG:root:{TICK: 50, PC: 1, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 0} movv ['$0', '$52']
+DEBUG:root:{TICK: 51, PC: 1, ADDR: 0, MEM_OUT: 111, AC: 0, DR: 0} movv ['$0', '$52']
+DEBUG:root:input: '\x00'
+DEBUG:root:{TICK: 52, PC: 1, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0} movv ['$0', '$52']
+DEBUG:root:{TICK: 53, PC: 2, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0} movv ['$69', '$0']
+DEBUG:root:{TICK: 54, PC: 2, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0} movv ['$69', '$0']
+DEBUG:root:{TICK: 55, PC: 2, ADDR: 72, MEM_OUT: 0, AC: 0, DR: 0} movv ['$69', '$0']
+DEBUG:root:{TICK: 56, PC: 2, ADDR: 72, MEM_OUT: 0, AC: 0, DR: 0} movv ['$69', '$0']
+DEBUG:root:{TICK: 57, PC: 2, ADDR: 72, MEM_OUT: 0, AC: 0, DR: 0} movv ['$69', '$0']
+INFO:root:input_buffer: < foo
+WARNING:root:Input buffer is empty!
+INFO:root:output_buffer: > 'foo'
+foo
+instr_counter: 11  ticks: 57
+```
+
+Пример проверки исходного кода:
+
+``` shell
+$ poetry run pytest . -v
+========================================================================= test session starts =========================================================================
+platform darwin -- Python 3.12.2, pytest-7.4.4, pluggy-1.4.0 -- /Users/anvisero/Desktop/ITMO/3course/1semester/Архитектура компьютера/lab3/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/anvisero/Desktop/ITMO/3course/1semester/Архитектура компьютера/lab3
+configfile: pyproject.toml
+plugins: golden-0.2.2
+collected 3 items                                                                                                                                                     
+
+integration_test.py::test_translator_and_machine[golden/cat.yml] PASSED                                                                                         [ 33%]
+integration_test.py::test_translator_and_machine[golden/hello.yml] PASSED                                                                                       [ 66%]
+integration_test.py::test_translator_and_machine[golden/hello_user_name.yml] PASSED                                                                             [100%]
+
+========================================================================== 3 passed in 0.04s ==========================================================================
+$  poetry run ruff check .
+$  lab3 git:(feature) ✗ poetry run ruff format .
+5 files left unchanged
+```
+
+
+| ФИО                        | алг             | LoC  | code байт  | code инстр. | инстр. | такт. | вариант                                                                                   |
+|----------------------------|-----------------|------|------------|-------------|--------|-------|-------------------------------------------------------------------------------------------|
+| Иванов Андрей Вячеславович | cat             | 19   | -          | 5           | 11     | 57    | lisp \| cisc \| harv \| hw \| tick \| struct \| stream \| mem \| cstr \| prob2 \| [4]char |
+| Иванов Андрей Вячеславович | hello           | 110  | -          | 20          | 19     | 98    | lisp \| cisc \| harv \| hw \| tick \| struct \| stream \| mem \| cstr \| prob2 \| [4]char |
+| Иванов Андрей Вячеславович | hello_user_name | 1    | -          | 6           | 15     | 28    | lisp \| cisc \| harv \| hw \| tick \| struct \| stream \| mem \| cstr \| prob2 \| [4]char |

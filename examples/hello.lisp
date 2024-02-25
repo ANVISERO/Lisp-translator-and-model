@@ -7,7 +7,7 @@
 ( defvar r " r " )
 ( defvar d " d " )
 
-( format f h )
+( print h )
 ( format f e )
 ( format f l )
 ( format f l )

@@ -311,7 +311,7 @@ class ControlUnit:
             self.tick()
 
     def __repr__(self):
-        state = "{{TICK: {}, PC: {}, ADDR: {}, MEM_OUT: {}, AC: {}, DR: {}}}".format(
+        state = "TICK: {}, PC: {}, ADDR: {}, MEM_OUT: {}, AC: {}, DR: {}".format(
             self._tick,
             self.program_counter,
             self.data_path.data_address,
