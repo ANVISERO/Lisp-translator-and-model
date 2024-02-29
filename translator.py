@@ -36,11 +36,10 @@ def symbols():
         "print",
         "defvar",
         "setq",
-        "dotimes",
-        "format",
         "=",
+        "<",
         "mod",
-        "cond",
+        "if",
         "loop",
         "+",
         "-",
@@ -56,17 +55,15 @@ def symbol2opcode(symbol):
         "print": Opcode.PRINT,
         "defvar": Opcode.DEFVAR,
         "setq": Opcode.SETQ,
-        "dotimes": Opcode.DOTIMES,
-        "format": Opcode.FORMAT,
         "=": Opcode.EQ,
+        "<": Opcode.JL,
         "mod": Opcode.MOD,
-        "cond": Opcode.COND,
+        "if": Opcode.IF,
         "loop": Opcode.LOOP,
         "+": Opcode.PLUS,
         "-": Opcode.MINUS,
         "*": Opcode.MUL,
         "/": Opcode.DIV,
-        "or": Opcode.OR,
     }.get(symbol)
 
 
@@ -74,6 +71,8 @@ def choose_func():
     """Обработка текущей функции"""
     global terms, term_number, code, memory_map, i
     i += 1
+    print(code)
+    print(stack)
     match terms[term_number].symbol:
         case "(":
             write_open_bracket()
@@ -87,16 +86,14 @@ def choose_func():
             write_defvar()
         case "setq":
             write_setq()
-        case "dotimes":
-            write_dotimes()
-        case "format":
-            write_format()
         case "=":
             write_equally()
+        case "<":
+            write_lower()
         case "mod":
             write_mod()
-        case "cond":
-            write_cond()
+        case "if":
+            write_if()
         case "loop":
             write_loop()
         case "+" | "-" | "/" | "*":
@@ -127,7 +124,8 @@ def write_read():
 
 def write_print():
     global code, memory_map
-    code.append({"opcode": Opcode.DEFVAR.__str__(), "arg": ["$" + str(IO_WRITE_ADDRESS), "$" + memory_map[get_args()]]})
+    code.append({"opcode": Opcode.DEFVAR.__str__(), "arg": ["$" + str(IO_WRITE_ADDRESS),
+                                                            "$" + str(memory_map[get_args()])]})
 
 
 def write_defvar():
@@ -145,40 +143,18 @@ def write_defvar():
 def write_setq():
     global code, memory_map, IO_READ_ADDRESS
     val = get_args()
-    get_args()
+    var = get_args()
     if code[len(code) - 1]["opcode"] != Opcode.READ.__str__():
-        code.append({"opcode": Opcode.SETQ.__str__(), "arg": [memory_map[val]]})
+        if var != ")":
+            code.append({"opcode": Opcode.DEFVAR.__str__(), "arg": ["$" + str(memory_map[val]),
+                                                                    "$" + str(memory_map[var])]})
+        else:
+            code.append({"opcode": Opcode.SETQ.__str__(), "arg": ["$" + str(memory_map[val])]})
     else:
         code.pop()
         code.append(
             {"opcode": Opcode.DEFVAR.__str__(), "arg": ["$" + str(memory_map[val]), "$" + str(IO_READ_ADDRESS)]}
         )
-
-
-def write_dotimes():
-    global stack, memory_map, term_number, jp_count
-    stack.extend([terms[term_number + 2].symbol, terms[term_number + 3].symbol, len(code)])
-    term_number += 5
-    choose_func()
-    if len(stack) > 3:
-        idx = stack.pop(-jp_count) - 1
-        begin = code[idx]
-        begin["arg"][0] = len(code) - 1
-        code[idx] = begin
-        for q in range(jp_count - 1):
-            jp_count -= 1
-            stack.pop(-jp_count) - 1
-        new_command = {
-            "opcode": Opcode.DOTIMES.__str__(),
-            "arg": [stack.pop(), memory_map[stack.pop()], memory_map[stack.pop()]],
-        }
-        code[len(code) - 1] = new_command
-    else:
-        new_command = {
-            "opcode": Opcode.DOTIMES.__str__(),
-            "arg": [stack.pop(), memory_map[stack.pop()], memory_map[stack.pop()]],
-        }
-        code.append(new_command)
 
 
 def write_format():
@@ -192,7 +168,17 @@ def write_format():
 def write_equally():
     global term_number, code, stack
     get_args()
-    code.append({"opcode": Opcode.EQ.__str__(), "arg": [get_args()]})
+    code.append({"opcode": Opcode.EQ.__str__(), "arg": ["$" + str(get_args())]})
+    stack.append(len(code) - 1)
+    term_number += 1
+
+
+def write_lower():
+    global term_number, code, stack
+    val = get_args()
+    code.append({"opcode": Opcode.MINUS.__str__(), "arg": ["$" + str(memory_map[val]),
+                                                           "$" + str(memory_map[get_args()])]})
+    code.append({"opcode": Opcode.JL.__str__(), "arg": [0]})
     stack.append(len(code) - 1)
     term_number += 1
 
@@ -200,7 +186,7 @@ def write_equally():
 def write_mod():
     global term_number, deep
     arg1 = memory_map[get_args()]
-    code.append({"opcode": Opcode.MOD.__str__(), "arg": [arg1, get_args()]})
+    code.append({"opcode": Opcode.MOD.__str__(), "arg": ["$" + str(arg1), get_args()]})
     term_number += 1
     deep -= 1
 
@@ -209,7 +195,7 @@ def write_cond():
     global term_number, deep, code, jp_count
     idx = 0
     term_number += 1
-    cur_deep = deep  # 2
+    cur_deep = deep
     while deep >= cur_deep:
         choose_func()
         if deep == cur_deep:
@@ -226,6 +212,24 @@ def write_cond():
     code[idx] = command
 
 
+def write_if():
+    global term_number, code, stack, deep
+    if_cur_deep = deep
+    term_number += 1
+    while if_cur_deep <= deep:
+        choose_func()
+        term_number += 1
+        if if_cur_deep == deep:
+            break
+    print("if_cur_deep: " + str(if_cur_deep))
+    print("deep: " + str(deep))
+    print("term_number: " + str(term_number))
+    jl_index = stack.pop()
+    cond = code[jl_index]
+    code[jl_index] = {"opcode": cond["opcode"], "arg": ["$" + str(len(code))]}
+    term_number -= 1
+
+
 def write_loop():
     global term_number, code, stack, deep
     stack.append(len(code))
@@ -233,11 +237,24 @@ def write_loop():
     term_number += 1
     while cur_deep <= deep:
         choose_func()
-        term_number += 1
-        if len(terms) == term_number:
+        print("Before" + str(code))
+        print("Before" + str(stack))
+        if cur_deep == deep:
             break
-    i = stack.pop()
-    code.append({"opcode": Opcode.JP.__str__(), "arg": [i]})
+        term_number += 1
+    print("cur_deep: " + str(cur_deep))
+    print("deep: " + str(deep))
+    print("term_number: " + str(term_number))
+    if code[len(code) - 2]["opcode"] == 'mov':
+        print("wwwwwwwwwwwwwwwwwwwwwwww")
+        choose_func()
+    print("after wwwwwwwwwwwwwwwwwwwwwwww")
+    cond_index = stack.pop()
+    jp_begin = stack.pop()
+    cond = code[cond_index]
+    code[cond_index] = {"opcode": cond["opcode"], "arg": ["$" + str(len(code) + 1)]}
+    code.append({"opcode": Opcode.JP.__str__(), "arg": ["$" + str(jp_begin)]})
+    print("After loop: " + str(code))
     term_number -= 1
 
 
@@ -245,7 +262,7 @@ def write_alu(operation):
     global term_number, deep
     arg = []
     while terms[term_number + 1].symbol != ")":
-        arg.append(memory_map[get_args()])
+        arg.append("$" + str(memory_map[get_args()]))
     code.append({"opcode": symbol2opcode(operation).__str__(), "arg": arg})
     term_number += 1
     deep -= 1
@@ -299,9 +316,9 @@ def translate(text):
     global term_number, deep
 
     while term_number < len(terms):
+        print(terms[term_number].symbol)
         if terms[term_number].symbol == "(":
             deep += 1
-            term_number += 1
             choose_func()
             if len(terms) == term_number:
                 break
@@ -316,7 +333,6 @@ def translate(text):
 
 def main(source, target):
     global code, deep
-
     with open(source, encoding="utf-8") as file:
         source = file.read()
     code = translate(source)

@@ -16,7 +16,7 @@ from math import copysign
 from isa import Opcode, read_code
 
 #  Маска для переполнения чисел
-MUSK_NUMBER = 2**32 - 1
+MUSK_NUMBER = 2 ** 32 - 1
 
 
 class DataPath:
@@ -46,17 +46,17 @@ class DataPath:
         assert 0 <= new_addr < self.data_memory_size, f"out of memory: {format(self.data_address)}"
         self.data_address = new_addr
 
-    def latch_dr(self, sel, arg, op_type):
+    def latch_dr(self, sel, arg):
         """Защелкнуть DR = прочитать данные из памяти
         sel = 1 Считать данные из декодера инструкций
         sel = 2 Считать данные из текущего адреса памяти
-        sel = 3 Защелкнуть данные с АЛУ"""
+        sel = 3 Защелкнуть данные с AC"""
         if sel == 1:
             self.dr = arg
         elif sel == 2:
             self.dr = self.data_memory[self.data_address]
         else:
-            self.dr = self.alu(op_type)
+            self.dr = self.acc
 
     def latch_acc(self, op_type):
         """Защелкнуть новое значение AC, новое значение приходит из ALU
@@ -90,41 +90,52 @@ class DataPath:
 
     def write(self):
         """Записать в текущую ячейку данные из AC"""
-        if isinstance(self.acc, int):
-            assert (
-                self.min_data_value <= self.data_memory[self.data_address] <= self.max_data_value
-            ), f"acc value is out of bound: {self.data_memory[self.data_address]}"
+        assert self.min_data_value <= self.data_memory[self.data_address] <= self.max_data_value, \
+            f"acc value is out of bound: {self.data_memory[self.data_address]}"
         if self.output_buffer_begin <= self.data_address <= self.data_memory_size:
             if self.zero():
                 input_buffer = list(
-                    map(
-                        chr,
-                        self.data_memory[
-                            self.input_buffer_begin : self.input_buffer_begin + self.input_buffer_pointer - 1
-                        ],
-                    )
+                    map(chr, self.data_memory[
+                             self.input_buffer_begin:
+                             self.input_buffer_begin +
+                             self.input_buffer_pointer - 1
+                             ]
+                        )
                 )
                 logging.info("input_buffer: < %s", ("".join(input_buffer)))
                 self.output_buffer_pointer -= 1
                 raise EOFError()
-            logging.debug(
-                "output: %s << %s",
-                repr(
-                    "".join(
-                        list(
-                            map(
-                                chr,
-                                self.data_memory[
-                                    self.output_buffer_begin : self.output_buffer_begin + self.output_buffer_pointer - 1
-                                ],
+            if self.acc > 128:
+                converted_data = []
+                out_end = self.output_buffer_begin + self.output_buffer_pointer - 1
+                output_data = self.data_memory[self.output_buffer_begin:out_end]
+                for value in output_data:
+                    if value > 128:
+                        converted_data.append(value)
+                    else:
+                        converted_data.append(chr(value))
+                logging.debug("output: %s << %s", repr("".join(converted_data)), self.acc)
+            else:
+                logging.debug(
+                    "output: %s << %s",
+                    repr(
+                        "".join(
+                            list(
+                                map(chr, self.data_memory[
+                                         self.output_buffer_begin:
+                                         self.output_buffer_begin + self.output_buffer_pointer - 1
+                                         ]
+                                    )
                             )
                         )
-                    )
-                ),
-                repr(chr(self.acc)),
-            )
+                    ),
+                    repr(chr(self.acc)),
+                )
         else:
-            logging.debug("input: %s", repr(chr(self.acc)))
+            if self.acc > 128:
+                logging.debug("input: %s", repr(self.acc))
+            else:
+                logging.debug("input: %s", repr(chr(self.acc)))
         self.data_memory[self.data_address] = self.acc
 
     def zero(self):
@@ -144,6 +155,8 @@ class ControlUnit:
         self.data_path = data_path
         self._tick = 0
         self.current_arg = 0
+        self.OP = "HALT"
+        self.in_progress = False
 
     def tick(self):
         """Счётчик тактов процессора. Вызывается при переходе на следующий такт."""
@@ -163,46 +176,45 @@ class ControlUnit:
         else:
             instr = self.program[self.program_counter]
             assert "arg" in instr, "internal error"
-            self.program_counter = instr["arg"][0]
+            self.program_counter = int(instr["arg"][0][1:])
         if self.program_counter > self.program_counter_max:
             self.program_counter_max = self.program_counter
 
     def decode_and_execute_instruction(self):
+        print(self.data_path.data_memory)
         instr = self.program[self.program_counter]
-        opcode = instr["opcode"]
+        if self.in_progress:
+            opcode = self.OP
+        else:
+            opcode = instr["opcode"]
         if (
-            self.data_path.data_memory[self.data_path.output_buffer_begin + self.data_path.output_buffer_pointer - 1]
-            == 10
+                self.data_path.data_memory[
+                    self.data_path.output_buffer_begin + self.data_path.output_buffer_pointer - 1]
+                == 10
         ):
-            output_buffer = list(
-                map(
-                    chr,
-                    self.data_path.data_memory[
-                        self.data_path.output_buffer_begin : self.data_path.output_buffer_begin
-                        + self.data_path.output_buffer_pointer
-                        - 1
-                    ],
-                )
-            )
+            output_buffer = list(map(chr, self.data_path.data_memory[
+                                          self.data_path.output_buffer_begin:
+                                          self.data_path.output_buffer_begin +
+                                          self.data_path.output_buffer_pointer - 1]))
             logging.info("output_buffer: > %s", repr("".join(output_buffer)))
             self.data_path.output_buffer_pointer = 0
         match opcode:
             case Opcode.HALT:
                 raise StopIteration()
-            case Opcode.DEFVAR | Opcode.SETQ:
+            case Opcode.DEFVAR:
                 self.execute_defvar(instr, opcode)
             case Opcode.MOD:
                 self.execute_mod(instr, opcode)
             case Opcode.EQ:
                 self.execute_eq()
+            case Opcode.JL:
+                self.execute_jl()
             case Opcode.PLUS | Opcode.MINUS | Opcode.MUL | Opcode.DIV:
                 self.execute_alu(instr, opcode)
             case Opcode.SETQ:
                 self.execute_setq(instr)
             case Opcode.JP:
                 self.execute_jp()
-            case Opcode.DOTIMES:
-                self.execute_dotimes(instr)
 
     def execute_defvar(self, instr, opcode):
         if isinstance(instr["arg"][1], str):
@@ -214,7 +226,7 @@ class ControlUnit:
                     self.data_path.latch_data_addr(int(instr["arg"][1][1:]))
 
                 self.tick()
-                self.data_path.latch_dr(2, None, None)
+                self.data_path.latch_dr(2, None)
                 self.tick()
                 if int(instr["arg"][0][1:]) == self.data_path.output_buffer_begin:
                     self.data_path.latch_data_addr(int(instr["arg"][0][1:]) + self.data_path.output_buffer_pointer)
@@ -225,11 +237,11 @@ class ControlUnit:
             else:
                 self.data_path.latch_data_addr(int(instr["arg"][0][1:]))
                 self.tick()
-                self.data_path.latch_dr(1, ord(instr["arg"][1]), None)
+                self.data_path.latch_dr(1, ord(instr["arg"][1]))
         else:
-            self.data_path.latch_data_addr(["arg"][1][0])
+            self.data_path.latch_data_addr(int(instr["arg"][0][1:]))
             self.tick()
-            self.data_path.latch_dr(1, instr["arg"][1], None)
+            self.data_path.latch_dr(1, instr["arg"][1])
 
         self.tick()
         self.data_path.latch_acc(opcode)
@@ -238,8 +250,8 @@ class ControlUnit:
         self.latch_program_counter(sel_next=True)
 
     def execute_mod(self, instr, opcode):
-        self.data_path.latch_data_addr(instr["arg"][0])
-        self.data_path.latch_dr(1, instr["arg"][1], None)
+        self.data_path.latch_data_addr(int(instr["arg"][0][1:]))
+        self.data_path.latch_dr(1, instr["arg"][1])
         self.tick()
 
         self.data_path.latch_acc(opcode)
@@ -253,28 +265,58 @@ class ControlUnit:
         else:
             self.latch_program_counter(sel_next=False)
 
+    def execute_jl(self):
+        self.tick()
+        if self.data_path.neg():
+            self.latch_program_counter(sel_next=False)
+        else:
+            self.latch_program_counter(sel_next=True)
+
     def execute_alu(self, instr, opcode):
-        self.data_path.latch_data_addr(instr["arg"][0])
-        self.tick()
-
-        self.data_path.latch_dr(2, None, None)
-        self.tick()
-        self.data_path.latch_data_addr(instr["arg"][1])
-        self.tick()
-        arg_counter = 2
-        while arg_counter < len(instr["arg"]):
-            self.data_path.latch_dr(3, None, opcode)
+        if len(instr["arg"]) > 2:
+            if not self.in_progress:
+                self.OP = opcode
+                self.in_progress = True
+                self.data_path.latch_data_addr(int(instr["arg"][0][1:]))
+                self.tick()
+                self.data_path.latch_dr(2, None)
+                self.tick()
+                self.data_path.latch_data_addr(int(instr["arg"][1][1:]))
+                self.tick()
+                self.data_path.latch_acc(opcode)
+                self.tick()
+                self.data_path.latch_dr(3, None)
+                self.tick()
+            else:
+                arg_counter = 2
+                while arg_counter < len(instr["arg"]) <= 6:
+                    self.data_path.latch_data_addr(int(instr["arg"][arg_counter][1:]))
+                    self.tick()
+                    self.data_path.latch_acc(opcode)
+                    self.tick()
+                    if arg_counter == len(instr["arg"]) - 1:
+                        break
+                    self.data_path.latch_dr(3, None)
+                    self.tick()
+                    arg_counter += 1
+                self.OP = "HALT"
+                self.in_progress = False
+                self.latch_program_counter(sel_next=True)
+        else:
+            self.data_path.latch_data_addr(int(instr["arg"][0][1:]))
             self.tick()
-            self.data_path.latch_data_addr(instr["arg"][arg_counter])
-            arg_counter += 1
+            self.data_path.latch_dr(2, None)
             self.tick()
-
-        self.data_path.latch_acc(opcode)
-        self.tick()
-        self.latch_program_counter(sel_next=True)
+            self.data_path.latch_data_addr(int(instr["arg"][1][1:]))
+            self.tick()
+            self.data_path.latch_acc(opcode)
+            self.tick()
+            self.data_path.latch_dr(3, None)
+            self.tick()
+            self.latch_program_counter(sel_next=True)
 
     def execute_setq(self, instr):
-        self.data_path.latch_data_addr(instr["arg"])
+        self.data_path.latch_data_addr(int(instr["arg"][0][1:]))
         self.tick()
 
         self.data_path.write()
@@ -285,30 +327,8 @@ class ControlUnit:
         self.latch_program_counter(sel_next=False)
         self.tick()
 
-    def execute_dotimes(self, instr):
-        self.data_path.latch_data_addr(instr["arg"][2])
-        self.tick()
-
-        self.data_path.latch_dr(2, None, None)
-        self.tick()
-
-        self.data_path.latch_data_addr(instr["arg"][1])
-        self.tick()
-
-        self.data_path.latch_acc(Opcode.MINUS)
-        self.tick()
-
-        if self.data_path.neg() | self.data_path.zero():
-            self.latch_program_counter(sel_next=True)
-            self.tick()
-        else:
-            self.data_path.latch_acc("inc")
-            self.data_path.latch_data_addr(instr["arg"][2])
-            self.tick()
-
-            self.data_path.write()
-            self.latch_program_counter(sel_next=False)
-            self.tick()
+    def in_progress(self):
+        return self.in_progress
 
     def __repr__(self):
         state = "TICK: {}, PC: {}, ADDR: {}, MEM_OUT: {}, AC: {}, DR: {}".format(
@@ -349,7 +369,8 @@ def simulation(code, input_tokens, input_buffer_begin, output_buffer_begin, data
         while True:
             assert limit > instr_counter, "too long execution, increase limit!"
             control_unit.decode_and_execute_instruction()
-            instr_counter += 1
+            if not control_unit.in_progress:
+                instr_counter += 1
     except EOFError:
         logging.warning("Input buffer is empty!")
         control_unit.program_counter_max += 1
@@ -358,7 +379,8 @@ def simulation(code, input_tokens, input_buffer_begin, output_buffer_begin, data
             while True:
                 assert limit > instr_counter, "too long execution, increase limit!"
                 control_unit.decode_and_execute_instruction()
-                instr_counter += 1
+                if not control_unit.in_progress:
+                    instr_counter += 1
         except StopIteration:
             pass
     except StopIteration:
@@ -367,24 +389,23 @@ def simulation(code, input_tokens, input_buffer_begin, output_buffer_begin, data
     if instr_counter >= limit:
         logging.warning("Limit exceeded!")
 
-    output_buffer = list(
-        map(
-            chr,
-            data_path.data_memory[
-                data_path.output_buffer_begin : data_path.output_buffer_begin + data_path.output_buffer_pointer
-            ],
-        )
-    )
-    logging.info("output_buffer: > %s", repr("".join(output_buffer)))
-    return "".join(output_buffer), instr_counter, control_unit.current_tick()
+    converted_data = []
+    for value in data_path.data_memory[
+                 data_path.output_buffer_begin: data_path.output_buffer_begin + data_path.output_buffer_pointer]:
+        if value > 128:
+            converted_data.append(str(value))
+        else:
+            converted_data.append(chr(value))
+    logging.info("output_buffer: > %s", repr("".join(converted_data)))
+    return "".join(converted_data), instr_counter, control_unit.current_tick()
 
 
-def main(code_file, input_file):
+def main(code, inputfile):
     """Функция запуска модели процессора. Параметры -- имена файлов с машинным
     кодом и с входными данными для симуляции.
     """
-    code = read_code(code_file)
-    with open(input_file, encoding="utf-8") as file:
+    code = read_code(code)
+    with open(inputfile, encoding="utf-8") as file:
         input_text = file.read()
         input_token = []
         for char in input_text:
