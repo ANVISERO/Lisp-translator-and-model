@@ -25,7 +25,7 @@ out_code: |-
    {"opcode": "movv", "arg": ["$69", "$6"]},
    {"opcode": "halt"}]
 out_stdout: |
-  source LoC: 54 code instr: 11
+  source LoC: 11 code instr: 11
   ============================================================
   30000
   instr_counter: 10  ticks: 59

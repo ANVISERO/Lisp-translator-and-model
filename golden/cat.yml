@@ -24,7 +24,7 @@ out_code: |-
    {"opcode": "jp", "arg": ["$3"]},
    {"opcode": "halt"}]
 out_stdout: |
-  source LoC: 37 code instr: 9
+  source LoC: 12 code instr: 9
   ============================================================
   foo
   instr_counter: 21  ticks: 95

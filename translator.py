@@ -263,7 +263,7 @@ def main(source_file: str, target_file: str):
     with open(source_file, encoding="utf-8") as file:
         source_file = file.read()
         final_code = translate(source_file)
-        print("source LoC:", len(source_file.split()), "code instr:", len(final_code))
+        print("source LoC:", len(source_file.split("\n")), "code instr:", len(final_code))
         write_code(target_file, final_code)
 
 
