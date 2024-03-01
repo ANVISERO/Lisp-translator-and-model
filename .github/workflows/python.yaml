@@ -4,15 +4,9 @@ on:
   push:
     branches:
       - feature
-    paths:
-      - ".github/workflows/*"
-      - "/**"
   pull_request:
     branches:
       - feature
-    paths:
-      - ".github/workflows/*"
-      - "/**"
 
 jobs:
   test:
