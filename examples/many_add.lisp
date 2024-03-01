@@ -1,0 +1,11 @@
+(
+    ( defvar a 1000 )
+    ( defvar b 2000 )
+    ( defvar c 3000 )
+    ( defvar d 4000 )
+    ( defvar e 10000 )
+    ( defvar f 10000 )
+    ( defvar r 0 )
+    ( setq r ( + a b c d e f ) )
+    ( print r )
+)
