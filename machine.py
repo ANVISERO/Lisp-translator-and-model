@@ -180,7 +180,6 @@ class ControlUnit:
         return self._tick
 
     def latch_program_counter(self, sel_next):
-        self.tick()
         if sel_next:
             self.program_counter += 1
         else:
