@@ -106,10 +106,15 @@ class DataPath:
                 logging.info("input_buffer: < %s", ("".join(input_buffer)))
                 self.output_buffer_pointer -= 1
                 raise EOFError()
-            if self.acc > 128:
-                converted_data = []
-                logging.debug("output: %s << %s", repr("".join(converted_data)), self.acc)
-            else:
+            if (
+                65 <= self.acc <= 90
+                or 97 <= self.acc <= 122
+                or self.acc == 10
+                or self.acc == 32
+                or self.acc == 33
+                or self.acc == 44
+                or self.acc == 63
+            ):
                 logging.debug(
                     "output: %s << %s",
                     repr(
@@ -128,11 +133,22 @@ class DataPath:
                     ),
                     repr(chr(self.acc)),
                 )
-        else:
-            if self.acc > 128:
-                logging.debug("input: %s", repr(self.acc))
             else:
+                converted_data = []
+                logging.debug("output: %s << %s", repr("".join(converted_data)), self.acc)
+        else:
+            if (
+                65 <= self.acc <= 90
+                or 97 <= self.acc <= 122
+                or self.acc == 10
+                or self.acc == 32
+                or self.acc == 33
+                or self.acc == 44
+                or self.acc == 63
+            ):
                 logging.debug("input: %s", repr(chr(self.acc)))
+            else:
+                logging.debug("input: %s", repr(self.acc))
         self.data_memory[self.data_address] = self.acc
 
     def zero(self):
@@ -231,7 +247,6 @@ class ControlUnit:
                     self.data_path.output_buffer_pointer += 1
                 else:
                     self.data_path.latch_data_addr(int(instr["arg"][0][1:]))
-                self.tick()
             else:
                 self.data_path.latch_data_addr(int(instr["arg"][0][1:]))
                 self.tick()
@@ -246,6 +261,7 @@ class ControlUnit:
         self.tick()
         self.data_path.write()
         self.latch_program_counter(sel_next=True)
+        self.tick()
 
     def execute_mod(self, instr, opcode):
         self.data_path.latch_data_addr(int(instr["arg"][0][1:]))
@@ -253,22 +269,22 @@ class ControlUnit:
         self.tick()
 
         self.data_path.latch_acc(opcode)
-        self.tick()
         self.latch_program_counter(sel_next=True)
+        self.tick()
 
     def execute_eq(self):
-        self.tick()
         if self.data_path.zero():
             self.latch_program_counter(sel_next=True)
         else:
             self.latch_program_counter(sel_next=False)
+        self.tick()
 
     def execute_jl(self):
-        self.tick()
         if self.data_path.neg():
             self.latch_program_counter(sel_next=False)
         else:
             self.latch_program_counter(sel_next=True)
+        self.tick()
 
     def execute_alu(self, instr, opcode):
         if len(instr["arg"]) > 2:
@@ -295,11 +311,11 @@ class ControlUnit:
                     if arg_counter == len(instr["arg"]) - 1:
                         break
                     self.data_path.latch_dr(3, None)
-                    self.tick()
                     arg_counter += 1
                 self.OP = "HALT"
                 self.in_progress = False
                 self.latch_program_counter(sel_next=True)
+                self.tick()
         else:
             self.data_path.latch_data_addr(int(instr["arg"][0][1:]))
             self.tick()
@@ -308,18 +324,16 @@ class ControlUnit:
             self.data_path.latch_data_addr(int(instr["arg"][1][1:]))
             self.tick()
             self.data_path.latch_acc(opcode)
-            self.tick()
-            self.data_path.latch_dr(3, None)
-            self.tick()
             self.latch_program_counter(sel_next=True)
+            self.tick()
 
     def execute_setq(self, instr):
         self.data_path.latch_data_addr(int(instr["arg"][0][1:]))
         self.tick()
 
         self.data_path.write()
-        self.tick()
         self.latch_program_counter(sel_next=True)
+        self.tick()
 
     def execute_jp(self):
         self.latch_program_counter(sel_next=False)

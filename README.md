@@ -20,7 +20,7 @@
 					
 <Arguments>         := <Argument> | <Argument> <Arguments>
              
-<Argument>          := <Variable> | <Number> | "(" <Argument> ")"
+<Argument>          := <Variable> | <number> | <sign> | <letter> | "(" <Argument> ")"
 
 <read-exp>          := "read"
 <print-exp>         := "print"
@@ -36,7 +36,9 @@
 
 <letter>            := "a" | "b" | ... | "z" | "A" | "B" | ... | "Z" | "_"
           
-<Number>            := "0" | "1" | "2" | ... | "9"
+<number>            := "0" | "1" | "2" | ... | "9"
+
+<sign>            := "?" | "!" | ","
                        
 ```
 
@@ -98,9 +100,9 @@
 
 | Syntax   | Mnemonic | Arguments      | Тактов | Comment                                                                                  |
 |:---------|:---------|----------------|:------:|------------------------------------------------------------------------------------------|
-| `defvar` | movv     | $addr1, $addr2 |   3    | Устанавливает значение $addr2 по данному адресу $addr1                                   |
-|          | movv     | $addr1, value  |   3    | Устанавливает значение value по данному адресу $addr                                     |
-| `setq`   | mov      | $addr, value   |   2    | Загружаем значения value по адресу $addr                                                 |
+| `defvar` | movv     | $addr1, $addr2 |   5    | Устанавливает значение $addr2 по данному адресу $addr1                                   |
+|          | movv     | $addr1, value  |   4    | Устанавливает значение value по данному адресу $addr                                     |
+| `setq`   | mov      | $addr          |   2    | Загружаем значения из AC по адресу $addr                                                 |
 | `mod`    | mod      | $addr, value   |   2    | Сохраняет в AC остаток от деления значения по адресу $addr на value                      |
 | `=`      | bne      | $addr          |   1    | Если AC != 0, то прыгаем на $addr                                                        |
 | `<`      | jl       | $addr          |   1    | Если AC < 0, то прыгаем на $addr                                                         |
@@ -108,8 +110,8 @@
 | `-`      | sub      | $addr1, $addr2 |   4+   | Вычесть из значения, лежащего по адресу $addr1 значение в адресе $addr2, результат в AC  |
 | `/`      | div      | $addr1, $addr2 |   4+   | Поделить значение, лежащее по адресу $addr1 на значение по адресу $addr2, результат в AC |
 | `*`      | mul      | $addr1, $addr2 |   4+   | Умножить значения, лежащие по адресам $addr1 $addr2, результат в AC                      |
-| `read`   | movv     | $addr1, $addr2 |   3    | Прочитать один символ с потока ввода                                                     |
-| `print`  | movv     | $addr1, $addr2 |   3    | Вывод символа в поток вывода                                                             |
+| `read`   | movv     | $addr1, $addr2 |   5    | Прочитать один символ с потока ввода                                                     |
+| `print`  | movv     | $addr1, $addr2 |   5    | Вывод символа в поток вывода                                                             |
 | `loop`   | jp       | $addr          |   1    | Безусловный переход по адресу $addr                                                      |
 |          | halt     | 0              |   0    | остановка                                                                                | 
 
@@ -465,8 +467,10 @@ $  poetry run ruff format .
 ```
 
 
-| ФИО                        | алг             | LoC  | code байт  | code инстр. | инстр. | такт. | вариант                                                                                   |
-|----------------------------|-----------------|------|------------|-------------|--------|-------|-------------------------------------------------------------------------------------------|
-| Иванов Андрей Вячеславович | cat             | 19   | -          | 5           | 11     | 57    | lisp \| cisc \| harv \| hw \| tick \| struct \| stream \| mem \| cstr \| prob2 \| [4]char |
-| Иванов Андрей Вячеславович | hello           | 110  | -          | 20          | 19     | 98    | lisp \| cisc \| harv \| hw \| tick \| struct \| stream \| mem \| cstr \| prob2 \| [4]char |
-| Иванов Андрей Вячеславович | hello_user_name | 1    | -          | 6           | 15     | 28    | lisp \| cisc \| harv \| hw \| tick \| struct \| stream \| mem \| cstr \| prob2 \| [4]char |
+| ФИО                        | алг             | LoC | code байт  | code инстр. | инстр. | такт. | вариант                                                                                   |
+|----------------------------|-----------------|-----|------------|-------------|--------|-------|-------------------------------------------------------------------------------------------|
+| Иванов Андрей Вячеславович | cat             | 37  | -          | 9           | 21     | 95    | lisp \| cisc \| harv \| hw \| tick \| struct \| stream \| mem \| cstr \| prob2 \| [4]char |
+| Иванов Андрей Вячеславович | hello           | 101 | -          | 20          | 19     | 106   | lisp \| cisc \| harv \| hw \| tick \| struct \| stream \| mem \| cstr \| prob2 \| [4]char |
+| Иванов Андрей Вячеславович | many_add        | 54  | -          | 11          | 10     | 59    | lisp \| cisc \| harv \| hw \| tick \| struct \| stream \| mem \| cstr \| prob2 \| [4]char |
+| Иванов Андрей Вячеславович | hello_user_name | 284 | -          | 56          | 78     | 399   | lisp \| cisc \| harv \| hw \| tick \| struct \| stream \| mem \| cstr \| prob2 \| [4]char |
+| Иванов Андрей Вячеславович | prob2           | 83  | -          | 18          | 318    | 1214  | lisp \| cisc \| harv \| hw \| tick \| struct \| stream \| mem \| cstr \| prob2 \| [4]char |
