@@ -16,7 +16,7 @@ from math import copysign
 from isa import Opcode, read_code
 
 #  Маска для переполнения чисел
-MUSK_NUMBER = 2 ** 32 - 1
+MUSK_NUMBER = 2**32 - 1
 
 
 class DataPath:
@@ -90,17 +90,18 @@ class DataPath:
 
     def write(self):
         """Записать в текущую ячейку данные из AC"""
-        assert self.min_data_value <= self.data_memory[self.data_address] <= self.max_data_value, \
-            f"acc value is out of bound: {self.data_memory[self.data_address]}"
+        assert (
+            self.min_data_value <= self.data_memory[self.data_address] <= self.max_data_value
+        ), f"acc value is out of bound: {self.data_memory[self.data_address]}"
         if self.output_buffer_begin <= self.data_address <= self.data_memory_size:
             if self.zero():
                 input_buffer = list(
-                    map(chr, self.data_memory[
-                             self.input_buffer_begin:
-                             self.input_buffer_begin +
-                             self.input_buffer_pointer - 1
-                             ]
-                        )
+                    map(
+                        chr,
+                        self.data_memory[
+                            self.input_buffer_begin : self.input_buffer_begin + self.input_buffer_pointer - 1
+                        ],
+                    )
                 )
                 logging.info("input_buffer: < %s", ("".join(input_buffer)))
                 self.output_buffer_pointer -= 1
@@ -114,11 +115,14 @@ class DataPath:
                     repr(
                         "".join(
                             list(
-                                map(chr, self.data_memory[
-                                         self.output_buffer_begin:
-                                         self.output_buffer_begin + self.output_buffer_pointer - 1
-                                         ]
-                                    )
+                                map(
+                                    chr,
+                                    self.data_memory[
+                                        self.output_buffer_begin : self.output_buffer_begin
+                                        + self.output_buffer_pointer
+                                        - 1
+                                    ],
+                                )
                             )
                         )
                     ),
@@ -177,14 +181,19 @@ class ControlUnit:
         else:
             opcode = instr["opcode"]
         if (
-                self.data_path.data_memory[
-                    self.data_path.output_buffer_begin + self.data_path.output_buffer_pointer - 1]
-                == 10
+            self.data_path.data_memory[self.data_path.output_buffer_begin + self.data_path.output_buffer_pointer - 1]
+            == 10
         ):
-            output_buffer = list(map(chr, self.data_path.data_memory[
-                                          self.data_path.output_buffer_begin:
-                                          self.data_path.output_buffer_begin +
-                                          self.data_path.output_buffer_pointer - 1]))
+            output_buffer = list(
+                map(
+                    chr,
+                    self.data_path.data_memory[
+                        self.data_path.output_buffer_begin : self.data_path.output_buffer_begin
+                        + self.data_path.output_buffer_pointer
+                        - 1
+                    ],
+                )
+            )
             logging.info("output_buffer: > %s", repr("".join(output_buffer)))
             self.data_path.output_buffer_pointer = 0
         match opcode:
@@ -377,7 +386,8 @@ def simulation(code, input_tokens, input_buffer_begin, output_buffer_begin, data
 
     converted_data = []
     for value in data_path.data_memory[
-                 data_path.output_buffer_begin: data_path.output_buffer_begin + data_path.output_buffer_pointer]:
+        data_path.output_buffer_begin : data_path.output_buffer_begin + data_path.output_buffer_pointer
+    ]:
         if value > 128:
             converted_data.append(str(value))
         else:

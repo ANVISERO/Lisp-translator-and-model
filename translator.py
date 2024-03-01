@@ -103,8 +103,12 @@ class Translator:
         self.term_number += 1
 
     def write_print(self):
-        self.code.append({"opcode": Opcode.DEFVAR.__str__(), "arg": ["$" + str(self.IO_WRITE_ADDRESS),
-                                                                     "$" + str(self.memory_map[self.get_args()])]})
+        self.code.append(
+            {
+                "opcode": Opcode.DEFVAR.__str__(),
+                "arg": ["$" + str(self.IO_WRITE_ADDRESS), "$" + str(self.memory_map[self.get_args()])],
+            }
+        )
 
     def write_defvar(self):
         var = self.get_args()
@@ -121,15 +125,21 @@ class Translator:
         var = self.get_args()
         if self.code[len(self.code) - 1]["opcode"] != Opcode.READ.__str__():
             if var != ")":
-                self.code.append({"opcode": Opcode.DEFVAR.__str__(), "arg": ["$" + str(self.memory_map[val]),
-                                                                             "$" + str(self.memory_map[var])]})
+                self.code.append(
+                    {
+                        "opcode": Opcode.DEFVAR.__str__(),
+                        "arg": ["$" + str(self.memory_map[val]), "$" + str(self.memory_map[var])],
+                    }
+                )
             else:
                 self.code.append({"opcode": Opcode.SETQ.__str__(), "arg": ["$" + str(self.memory_map[val])]})
         else:
             self.code.pop()
             self.code.append(
-                {"opcode": Opcode.DEFVAR.__str__(), "arg": ["$" + str(self.memory_map[val]),
-                                                            "$" + str(self.IO_READ_ADDRESS)]}
+                {
+                    "opcode": Opcode.DEFVAR.__str__(),
+                    "arg": ["$" + str(self.memory_map[val]), "$" + str(self.IO_READ_ADDRESS)],
+                }
             )
 
     def write_equally(self):
@@ -140,8 +150,12 @@ class Translator:
 
     def write_lower(self):
         val = self.get_args()
-        self.code.append({"opcode": Opcode.MINUS.__str__(), "arg": ["$" + str(self.memory_map[val]),
-                                                                    "$" + str(self.memory_map[self.get_args()])]})
+        self.code.append(
+            {
+                "opcode": Opcode.MINUS.__str__(),
+                "arg": ["$" + str(self.memory_map[val]), "$" + str(self.memory_map[self.get_args()])],
+            }
+        )
         self.code.append({"opcode": Opcode.JL.__str__(), "arg": [0]})
         self.stack.append(len(self.code) - 1)
         self.term_number += 1
