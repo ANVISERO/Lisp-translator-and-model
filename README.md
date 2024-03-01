@@ -7,24 +7,27 @@
 ## Язык программирования
 
 ``` ebnf
+<Expressions>       := "(" <Expression> ")" | "(" <Expressions> ")"
 <Expression>        := "(" <Operation> ")"
 
 <Operation>         := <read-exp>
                     |  <print-exp> <Argument>
                     |  <def-exp> <Argument> <Argument>
                     |  <condition>
-                    |  <loop-exp> <condition> <Arguments>
+                    |  <if-exp> "(" <condition> ")" <Expressions>
+                    |  <loop-exp> "(" <condition> ")" <Expressions>
                     |  <arithm-exp> <Argument> <Arguments>
 					
 <Arguments>         := <Argument> | <Argument> <Arguments>
              
-<Argument>          := <Variable> | <Number> | (<Argument>)
+<Argument>          := <Variable> | <Number> | "(" <Argument> ")"
 
 <read-exp>          := "read"
 <print-exp>         := "print"
 <def-exp>           := "defvar" | "setq" 
 <cond-exp>          := "=" | "<" | "mod"
 <loop-exp>          := "loop"
+<if-exp>            := "if"
 <arithm-exp>        := "+" | "-" | "*" | "/"
 
 <condition>         := <cond-exp> <Argument> <Argument>
@@ -33,9 +36,7 @@
 
 <letter>            := "a" | "b" | ... | "z" | "A" | "B" | ... | "Z" | "_"
           
-<Number>            := <digit> | <digit> <Variable>
-
-<digit>	            := "0" | "1" | "2" | ... | "9"
+<Number>            := "0" | "1" | "2" | ... | "9"
                        
 ```
 
@@ -65,33 +66,31 @@
 
 Особенности процессора:
 
-- Машинное слово -- 32 бита, знаковое.
+- Машинное слово – 32 бита, знаковое.
 - Память данных:
-    - адресуется через регистр `data_address`, значение может быть загружено только из Control Unit;
+    - адресуется через регистр `data_address`, значение может быть загружено только из `Control Unit`;
     - может быть записана:
         - из аккумулятора `AC`;
         - из ввода;
     - может быть прочитана в регистр данных `DR`
 - Регистр аккумулятора: `AC`:
     - может быть записан в память;
-    - используются флаги zero, neg;
+    - используются флаги `zero`, `neg`;
 - Регистр данных `DR`:
-    - Используется для получения операндов из Control Unit, чтения данных из data memory, сохранения результатов ALU
-    - Может хранить данные
-    - Содержимое передается в ALU
+    - Используется для получения операндов из `Control Unit`, чтения данных из `Data memory`, сохранения результатов `AC`
 - ALU
     - Производит арифметико-логические операции
-    - На вход подаются данные из `DR` и data memory
+    - На вход подаются данные из `DR` и Data memory
     - Поддерживаемые операции:
-        - add - сложение двух операндов
-        - sub - вычесть из значения на левом входе значение на правом входе
-        - mul - умножение двух операндов
-        - div - поделить значение на левом входе значение на правом входе
-        - mod - остаток от деления значения левого входа от правого входа
-        - movv - подать на выход значение левого входа (Для чтения данных)
-    - Результат записывается в `AC` или `DR`
+        - `add` - сложение двух операндов
+        - `sub` - вычесть из значения на левом входе значение на правом входе
+        - `mul` - умножение двух операндов
+        - `div` - поделить значение на левом входе значение на правом входе
+        - `mod` - остаток от деления значения левого входа от правого входа
+        - `movv` - подать на выход значение левого входа (Для чтения данных)
+    - Результат записывается в `AC`
 - `program_counter` – счётчик команд:
-    - Может быть перезаписан из Control Unit
+    - Может быть перезаписан из `Control Unit`
     - Может быть инкрементирован
 - Ввод/вывод осуществляется путем чтения и записи в определенные ячейки памяти
 
@@ -100,9 +99,9 @@
 | Syntax   | Mnemonic | Arguments      | Тактов | Comment                                                                                  |
 |:---------|:---------|----------------|:------:|------------------------------------------------------------------------------------------|
 | `defvar` | movv     | $addr1, $addr2 |   3    | Устанавливает значение $addr2 по данному адресу $addr1                                   |
-|          | movv     | $addr1, value2 |   3    | Устанавливает значение value по данному адресу $addr                                     |
+|          | movv     | $addr1, value  |   3    | Устанавливает значение value по данному адресу $addr                                     |
 | `setq`   | mov      | $addr, value   |   2    | Загружаем значения value по адресу $addr                                                 |
-| `mod`    | mod      | $addr1, $addr2 |   2    | Сохраняет в AC остаток от деления значения по адресу $addr1 на $addr2                    |
+| `mod`    | mod      | $addr, value   |   2    | Сохраняет в AC остаток от деления значения по адресу $addr на value                      |
 | `=`      | bne      | $addr          |   1    | Если AC != 0, то прыгаем на $addr                                                        |
 | `<`      | jl       | $addr          |   1    | Если AC < 0, то прыгаем на $addr                                                         |
 | `+`      | add      | $addr1, $addr2 |   4+   | Сложить значения, лежащие по адресам $addr1 $addr2, результат в AC                       |
@@ -110,14 +109,14 @@
 | `/`      | div      | $addr1, $addr2 |   4+   | Поделить значение, лежащее по адресу $addr1 на значение по адресу $addr2, результат в AC |
 | `*`      | mul      | $addr1, $addr2 |   4+   | Умножить значения, лежащие по адресам $addr1 $addr2, результат в AC                      |
 | `read`   | movv     | $addr1, $addr2 |   3    | Прочитать один символ с потока ввода                                                     |
-| `print`  | movv     | $addr1, $addr2 |   3    | Вывод символа по адресу $addr1                                                           |
+| `print`  | movv     | $addr1, $addr2 |   3    | Вывод символа в поток вывода                                                             |
 | `loop`   | jp       | $addr          |   1    | Безусловный переход по адресу $addr                                                      |
 |          | halt     | 0              |   0    | остановка                                                                                | 
 
 ### Кодирование инструкций
 
 - Машинный код сериализуется в список JSON.
-- Одна команда функции – одна инструкция.
+- Одна команда функции – одна инструкция. (за исключением команды `<`, которая реализуется за 2 инструкции)
 - Индекс списка – адрес инструкции. Используется для команд перехода.
 
 Пример:
@@ -135,7 +134,7 @@
 где:
 
 - `opcode` – строка с кодом операции;
-- `arg` – список аргументов (может отсутствовать);
+- `arg` – список аргументов;
 
 ## Транслятор
 
@@ -174,14 +173,12 @@
 - `latch_data_addr` – защёлкнуть значение в `data_addr`;
 - `latch_acc` – защёлкнуть в аккумулятор значение с ALU;
 - `latch_dr` – защелкнуть в регистр данных выбранное значение
-- `output` – записать текущее значение `data memory` в вывод (обработка на python);
 - `wr` – записать выбранное значение в память:
     - Из регистра `AC`
-    - из ввода (обработка на python).
 
 Флаги:
-- `neg` – отражает наличие в аккумуляторе отрицательного числа
-- `zero` – отражает наличие нулевого значения в аккумуляторе.
+- `zero` – отражает наличие нулевого значения в аккумуляторе
+- `neg` – отражает наличие отрицательного значения в аккумуляторе
 
 ## Control Unit
 ![img.png](pictures/ControlUnit.png)
@@ -203,7 +200,7 @@
 - Остановка моделирования осуществляется при:
     - исключении `EOFError` – если нет данных для чтения из порта ввода-вывода;
     - исключении `StopIteration` – если выполнена инструкция `halt`.
-- Управление симуляцией реализовано в функции `simulate`.
+- Управление симуляцией реализовано в функции `simulation`.
 
 Как обрабатывать инструкции длиной в 2 машинных слова
 
@@ -228,6 +225,8 @@
 - [cat.yml](golden%2Fcat.yml)
 - [hello.yml](golden%2Fhello.yml)
 - [hello_user_name.yml](golden%2Fhello_user_name.yml)
+- [many_add.yml](golden%2Fmany_add.yml)
+- [prob2.yml](golden%2Fprob2.yml)
 
 Запустить тесты: `poetry run pytest . -v`
 
@@ -305,13 +304,20 @@ jobs:
 $ cat examples/foo.txt
 foo
 $ cat examples/cat.lisp 
-( defvar r )
-( loop
-    ( setq r ( read ) )
-    ( format t r )
+(
+    ( defvar r )
+    ( defvar a 0 )
+    ( defvar b 1 )
+    (
+        loop ( < a b )
+        (
+            ( setq r ( read ) )
+            ( print r )
+        )
+    )
 )
 $ python3 translator.py examples/cat.lisp target.out
-source LoC: 19 code instr: 5
+source LoC: 37 code instr: 9
 $ cat target.out
 [{"opcode": "movv", "arg": ["$0", " "]},
  {"opcode": "movv", "arg": ["$0", "$52"]},
@@ -319,77 +325,119 @@ $ cat target.out
  {"opcode": "jp", "arg": [1]},
  {"opcode": "halt"}]
 $ python3 machine.py target.out examples/foo.txt                  
-DEBUG:root:{TICK: 0, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0} movv ['$0', ' ']
-DEBUG:root:{TICK: 1, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0} movv ['$0', ' ']
-DEBUG:root:{TICK: 2, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 32} movv ['$0', ' ']
-DEBUG:root:{TICK: 3, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 32, DR: 32} movv ['$0', ' ']
+DEBUG:root:TICK: 0, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0 movv ['$0', ' ']
+DEBUG:root:TICK: 1, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0 movv ['$0', ' ']
+DEBUG:root:TICK: 2, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 32 movv ['$0', ' ']
+DEBUG:root:TICK: 3, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 32, DR: 32 movv ['$0', ' ']
 DEBUG:root:input: ' '
-DEBUG:root:{TICK: 4, PC: 0, ADDR: 0, MEM_OUT: 32, AC: 32, DR: 32} movv ['$0', ' ']
-DEBUG:root:{TICK: 5, PC: 1, ADDR: 52, MEM_OUT: 102, AC: 32, DR: 32} movv ['$0', '$52']
-DEBUG:root:{TICK: 6, PC: 1, ADDR: 52, MEM_OUT: 102, AC: 32, DR: 102} movv ['$0', '$52']
-DEBUG:root:{TICK: 7, PC: 1, ADDR: 0, MEM_OUT: 32, AC: 32, DR: 102} movv ['$0', '$52']
-DEBUG:root:{TICK: 8, PC: 1, ADDR: 0, MEM_OUT: 32, AC: 32, DR: 102} movv ['$0', '$52']
-DEBUG:root:{TICK: 9, PC: 1, ADDR: 0, MEM_OUT: 32, AC: 102, DR: 102} movv ['$0', '$52']
-DEBUG:root:input: 'f'
-DEBUG:root:{TICK: 10, PC: 1, ADDR: 0, MEM_OUT: 102, AC: 102, DR: 102} movv ['$0', '$52']
-DEBUG:root:{TICK: 11, PC: 2, ADDR: 0, MEM_OUT: 102, AC: 102, DR: 102} movv ['$69', '$0']
-DEBUG:root:{TICK: 12, PC: 2, ADDR: 0, MEM_OUT: 102, AC: 102, DR: 102} movv ['$69', '$0']
-DEBUG:root:{TICK: 13, PC: 2, ADDR: 69, MEM_OUT: 0, AC: 102, DR: 102} movv ['$69', '$0']
-DEBUG:root:{TICK: 14, PC: 2, ADDR: 69, MEM_OUT: 0, AC: 102, DR: 102} movv ['$69', '$0']
-DEBUG:root:{TICK: 15, PC: 2, ADDR: 69, MEM_OUT: 0, AC: 102, DR: 102} movv ['$69', '$0']
-DEBUG:root:output: '' << 'f'
-DEBUG:root:{TICK: 16, PC: 2, ADDR: 69, MEM_OUT: 102, AC: 102, DR: 102} movv ['$69', '$0']
-DEBUG:root:{TICK: 17, PC: 3, ADDR: 69, MEM_OUT: 102, AC: 102, DR: 102} jp [1]
-DEBUG:root:{TICK: 18, PC: 1, ADDR: 69, MEM_OUT: 102, AC: 102, DR: 102} movv ['$0', '$52']
-DEBUG:root:{TICK: 19, PC: 1, ADDR: 53, MEM_OUT: 111, AC: 102, DR: 102} movv ['$0', '$52']
-DEBUG:root:{TICK: 20, PC: 1, ADDR: 53, MEM_OUT: 111, AC: 102, DR: 111} movv ['$0', '$52']
-DEBUG:root:{TICK: 21, PC: 1, ADDR: 0, MEM_OUT: 102, AC: 102, DR: 111} movv ['$0', '$52']
-DEBUG:root:{TICK: 22, PC: 1, ADDR: 0, MEM_OUT: 102, AC: 102, DR: 111} movv ['$0', '$52']
-DEBUG:root:{TICK: 23, PC: 1, ADDR: 0, MEM_OUT: 102, AC: 111, DR: 111} movv ['$0', '$52']
-DEBUG:root:input: 'o'
-DEBUG:root:{TICK: 24, PC: 1, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
-DEBUG:root:{TICK: 25, PC: 2, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$69', '$0']
-DEBUG:root:{TICK: 26, PC: 2, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$69', '$0']
-DEBUG:root:{TICK: 27, PC: 2, ADDR: 70, MEM_OUT: 0, AC: 111, DR: 111} movv ['$69', '$0']
-DEBUG:root:{TICK: 28, PC: 2, ADDR: 70, MEM_OUT: 0, AC: 111, DR: 111} movv ['$69', '$0']
-DEBUG:root:{TICK: 29, PC: 2, ADDR: 70, MEM_OUT: 0, AC: 111, DR: 111} movv ['$69', '$0']
-DEBUG:root:output: 'f' << 'o'
-DEBUG:root:{TICK: 30, PC: 2, ADDR: 70, MEM_OUT: 111, AC: 111, DR: 111} movv ['$69', '$0']
-DEBUG:root:{TICK: 31, PC: 3, ADDR: 70, MEM_OUT: 111, AC: 111, DR: 111} jp [1]
-DEBUG:root:{TICK: 32, PC: 1, ADDR: 70, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
-DEBUG:root:{TICK: 33, PC: 1, ADDR: 54, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
-DEBUG:root:{TICK: 34, PC: 1, ADDR: 54, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
-DEBUG:root:{TICK: 35, PC: 1, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
-DEBUG:root:{TICK: 36, PC: 1, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
-DEBUG:root:{TICK: 37, PC: 1, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
-DEBUG:root:input: 'o'
-DEBUG:root:{TICK: 38, PC: 1, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
-DEBUG:root:{TICK: 39, PC: 2, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$69', '$0']
-DEBUG:root:{TICK: 40, PC: 2, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111} movv ['$69', '$0']
-DEBUG:root:{TICK: 41, PC: 2, ADDR: 71, MEM_OUT: 0, AC: 111, DR: 111} movv ['$69', '$0']
-DEBUG:root:{TICK: 42, PC: 2, ADDR: 71, MEM_OUT: 0, AC: 111, DR: 111} movv ['$69', '$0']
-DEBUG:root:{TICK: 43, PC: 2, ADDR: 71, MEM_OUT: 0, AC: 111, DR: 111} movv ['$69', '$0']
-DEBUG:root:output: 'fo' << 'o'
-DEBUG:root:{TICK: 44, PC: 2, ADDR: 71, MEM_OUT: 111, AC: 111, DR: 111} movv ['$69', '$0']
-DEBUG:root:{TICK: 45, PC: 3, ADDR: 71, MEM_OUT: 111, AC: 111, DR: 111} jp [1]
-DEBUG:root:{TICK: 46, PC: 1, ADDR: 71, MEM_OUT: 111, AC: 111, DR: 111} movv ['$0', '$52']
-DEBUG:root:{TICK: 47, PC: 1, ADDR: 55, MEM_OUT: 0, AC: 111, DR: 111} movv ['$0', '$52']
-DEBUG:root:{TICK: 48, PC: 1, ADDR: 55, MEM_OUT: 0, AC: 111, DR: 0} movv ['$0', '$52']
-DEBUG:root:{TICK: 49, PC: 1, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 0} movv ['$0', '$52']
-DEBUG:root:{TICK: 50, PC: 1, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 0} movv ['$0', '$52']
-DEBUG:root:{TICK: 51, PC: 1, ADDR: 0, MEM_OUT: 111, AC: 0, DR: 0} movv ['$0', '$52']
+DEBUG:root:TICK: 4, PC: 0, ADDR: 0, MEM_OUT: 32, AC: 32, DR: 32 movv ['$0', ' ']
+DEBUG:root:TICK: 5, PC: 1, ADDR: 1, MEM_OUT: 0, AC: 32, DR: 32 movv ['$1', 0]
+DEBUG:root:TICK: 6, PC: 1, ADDR: 1, MEM_OUT: 0, AC: 32, DR: 0 movv ['$1', 0]
+DEBUG:root:TICK: 7, PC: 1, ADDR: 1, MEM_OUT: 0, AC: 0, DR: 0 movv ['$1', 0]
 DEBUG:root:input: '\x00'
-DEBUG:root:{TICK: 52, PC: 1, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0} movv ['$0', '$52']
-DEBUG:root:{TICK: 53, PC: 2, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0} movv ['$69', '$0']
-DEBUG:root:{TICK: 54, PC: 2, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0} movv ['$69', '$0']
-DEBUG:root:{TICK: 55, PC: 2, ADDR: 72, MEM_OUT: 0, AC: 0, DR: 0} movv ['$69', '$0']
-DEBUG:root:{TICK: 56, PC: 2, ADDR: 72, MEM_OUT: 0, AC: 0, DR: 0} movv ['$69', '$0']
-DEBUG:root:{TICK: 57, PC: 2, ADDR: 72, MEM_OUT: 0, AC: 0, DR: 0} movv ['$69', '$0']
+DEBUG:root:TICK: 8, PC: 1, ADDR: 1, MEM_OUT: 0, AC: 0, DR: 0 movv ['$1', 0]
+DEBUG:root:TICK: 9, PC: 2, ADDR: 2, MEM_OUT: 0, AC: 0, DR: 0 movv ['$2', 1]
+DEBUG:root:TICK: 10, PC: 2, ADDR: 2, MEM_OUT: 0, AC: 0, DR: 1 movv ['$2', 1]
+DEBUG:root:TICK: 11, PC: 2, ADDR: 2, MEM_OUT: 0, AC: 1, DR: 1 movv ['$2', 1]
+DEBUG:root:input: '\x01'
+DEBUG:root:TICK: 12, PC: 2, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 movv ['$2', 1]
+DEBUG:root:TICK: 13, PC: 3, ADDR: 1, MEM_OUT: 0, AC: 1, DR: 1 sub ['$1', '$2']
+DEBUG:root:TICK: 14, PC: 3, ADDR: 1, MEM_OUT: 0, AC: 1, DR: 0 sub ['$1', '$2']
+DEBUG:root:TICK: 15, PC: 3, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 0 sub ['$1', '$2']
+DEBUG:root:TICK: 16, PC: 3, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 0 sub ['$1', '$2']
+DEBUG:root:TICK: 17, PC: 3, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 sub ['$1', '$2']
+DEBUG:root:TICK: 18, PC: 3, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 sub ['$1', '$2']
+DEBUG:root:TICK: 19, PC: 4, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 jl ['$8']
+DEBUG:root:TICK: 20, PC: 4, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 jl ['$8']
+DEBUG:root:TICK: 21, PC: 5, ADDR: 52, MEM_OUT: 102, AC: 1, DR: 1 movv ['$0', '$52']
+DEBUG:root:TICK: 22, PC: 5, ADDR: 52, MEM_OUT: 102, AC: 1, DR: 102 movv ['$0', '$52']
+DEBUG:root:TICK: 23, PC: 5, ADDR: 0, MEM_OUT: 32, AC: 1, DR: 102 movv ['$0', '$52']
+DEBUG:root:TICK: 24, PC: 5, ADDR: 0, MEM_OUT: 32, AC: 1, DR: 102 movv ['$0', '$52']
+DEBUG:root:TICK: 25, PC: 5, ADDR: 0, MEM_OUT: 32, AC: 102, DR: 102 movv ['$0', '$52']
+DEBUG:root:input: 'f'
+DEBUG:root:TICK: 26, PC: 5, ADDR: 0, MEM_OUT: 102, AC: 102, DR: 102 movv ['$0', '$52']
+DEBUG:root:TICK: 27, PC: 6, ADDR: 0, MEM_OUT: 102, AC: 102, DR: 102 movv ['$69', '$0']
+DEBUG:root:TICK: 28, PC: 6, ADDR: 0, MEM_OUT: 102, AC: 102, DR: 102 movv ['$69', '$0']
+DEBUG:root:TICK: 29, PC: 6, ADDR: 69, MEM_OUT: 0, AC: 102, DR: 102 movv ['$69', '$0']
+DEBUG:root:TICK: 30, PC: 6, ADDR: 69, MEM_OUT: 0, AC: 102, DR: 102 movv ['$69', '$0']
+DEBUG:root:TICK: 31, PC: 6, ADDR: 69, MEM_OUT: 0, AC: 102, DR: 102 movv ['$69', '$0']
+DEBUG:root:output: '' << 'f'
+DEBUG:root:TICK: 32, PC: 6, ADDR: 69, MEM_OUT: 102, AC: 102, DR: 102 movv ['$69', '$0']
+DEBUG:root:TICK: 33, PC: 7, ADDR: 69, MEM_OUT: 102, AC: 102, DR: 102 jp ['$3']
+DEBUG:root:TICK: 34, PC: 3, ADDR: 69, MEM_OUT: 102, AC: 102, DR: 102 sub ['$1', '$2']
+DEBUG:root:TICK: 35, PC: 3, ADDR: 1, MEM_OUT: 0, AC: 102, DR: 102 sub ['$1', '$2']
+DEBUG:root:TICK: 36, PC: 3, ADDR: 1, MEM_OUT: 0, AC: 102, DR: 0 sub ['$1', '$2']
+DEBUG:root:TICK: 37, PC: 3, ADDR: 2, MEM_OUT: 1, AC: 102, DR: 0 sub ['$1', '$2']
+DEBUG:root:TICK: 38, PC: 3, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 0 sub ['$1', '$2']
+DEBUG:root:TICK: 39, PC: 3, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 sub ['$1', '$2']
+DEBUG:root:TICK: 40, PC: 3, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 sub ['$1', '$2']
+DEBUG:root:TICK: 41, PC: 4, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 jl ['$8']
+DEBUG:root:TICK: 42, PC: 4, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 jl ['$8']
+DEBUG:root:TICK: 43, PC: 5, ADDR: 53, MEM_OUT: 111, AC: 1, DR: 1 movv ['$0', '$52']
+DEBUG:root:TICK: 44, PC: 5, ADDR: 53, MEM_OUT: 111, AC: 1, DR: 111 movv ['$0', '$52']
+DEBUG:root:TICK: 45, PC: 5, ADDR: 0, MEM_OUT: 102, AC: 1, DR: 111 movv ['$0', '$52']
+DEBUG:root:TICK: 46, PC: 5, ADDR: 0, MEM_OUT: 102, AC: 1, DR: 111 movv ['$0', '$52']
+DEBUG:root:TICK: 47, PC: 5, ADDR: 0, MEM_OUT: 102, AC: 111, DR: 111 movv ['$0', '$52']
+DEBUG:root:input: 'o'
+DEBUG:root:TICK: 48, PC: 5, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111 movv ['$0', '$52']
+DEBUG:root:TICK: 49, PC: 6, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111 movv ['$69', '$0']
+DEBUG:root:TICK: 50, PC: 6, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111 movv ['$69', '$0']
+DEBUG:root:TICK: 51, PC: 6, ADDR: 70, MEM_OUT: 0, AC: 111, DR: 111 movv ['$69', '$0']
+DEBUG:root:TICK: 52, PC: 6, ADDR: 70, MEM_OUT: 0, AC: 111, DR: 111 movv ['$69', '$0']
+DEBUG:root:TICK: 53, PC: 6, ADDR: 70, MEM_OUT: 0, AC: 111, DR: 111 movv ['$69', '$0']
+DEBUG:root:output: 'f' << 'o'
+DEBUG:root:TICK: 54, PC: 6, ADDR: 70, MEM_OUT: 111, AC: 111, DR: 111 movv ['$69', '$0']
+DEBUG:root:TICK: 55, PC: 7, ADDR: 70, MEM_OUT: 111, AC: 111, DR: 111 jp ['$3']
+DEBUG:root:TICK: 56, PC: 3, ADDR: 70, MEM_OUT: 111, AC: 111, DR: 111 sub ['$1', '$2']
+DEBUG:root:TICK: 57, PC: 3, ADDR: 1, MEM_OUT: 0, AC: 111, DR: 111 sub ['$1', '$2']
+DEBUG:root:TICK: 58, PC: 3, ADDR: 1, MEM_OUT: 0, AC: 111, DR: 0 sub ['$1', '$2']
+DEBUG:root:TICK: 59, PC: 3, ADDR: 2, MEM_OUT: 1, AC: 111, DR: 0 sub ['$1', '$2']
+DEBUG:root:TICK: 60, PC: 3, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 0 sub ['$1', '$2']
+DEBUG:root:TICK: 61, PC: 3, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 sub ['$1', '$2']
+DEBUG:root:TICK: 62, PC: 3, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 sub ['$1', '$2']
+DEBUG:root:TICK: 63, PC: 4, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 jl ['$8']
+DEBUG:root:TICK: 64, PC: 4, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 jl ['$8']
+DEBUG:root:TICK: 65, PC: 5, ADDR: 54, MEM_OUT: 111, AC: 1, DR: 1 movv ['$0', '$52']
+DEBUG:root:TICK: 66, PC: 5, ADDR: 54, MEM_OUT: 111, AC: 1, DR: 111 movv ['$0', '$52']
+DEBUG:root:TICK: 67, PC: 5, ADDR: 0, MEM_OUT: 111, AC: 1, DR: 111 movv ['$0', '$52']
+DEBUG:root:TICK: 68, PC: 5, ADDR: 0, MEM_OUT: 111, AC: 1, DR: 111 movv ['$0', '$52']
+DEBUG:root:TICK: 69, PC: 5, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111 movv ['$0', '$52']
+DEBUG:root:input: 'o'
+DEBUG:root:TICK: 70, PC: 5, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111 movv ['$0', '$52']
+DEBUG:root:TICK: 71, PC: 6, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111 movv ['$69', '$0']
+DEBUG:root:TICK: 72, PC: 6, ADDR: 0, MEM_OUT: 111, AC: 111, DR: 111 movv ['$69', '$0']
+DEBUG:root:TICK: 73, PC: 6, ADDR: 71, MEM_OUT: 0, AC: 111, DR: 111 movv ['$69', '$0']
+DEBUG:root:TICK: 74, PC: 6, ADDR: 71, MEM_OUT: 0, AC: 111, DR: 111 movv ['$69', '$0']
+DEBUG:root:TICK: 75, PC: 6, ADDR: 71, MEM_OUT: 0, AC: 111, DR: 111 movv ['$69', '$0']
+DEBUG:root:output: 'fo' << 'o'
+DEBUG:root:TICK: 76, PC: 6, ADDR: 71, MEM_OUT: 111, AC: 111, DR: 111 movv ['$69', '$0']
+DEBUG:root:TICK: 77, PC: 7, ADDR: 71, MEM_OUT: 111, AC: 111, DR: 111 jp ['$3']
+DEBUG:root:TICK: 78, PC: 3, ADDR: 71, MEM_OUT: 111, AC: 111, DR: 111 sub ['$1', '$2']
+DEBUG:root:TICK: 79, PC: 3, ADDR: 1, MEM_OUT: 0, AC: 111, DR: 111 sub ['$1', '$2']
+DEBUG:root:TICK: 80, PC: 3, ADDR: 1, MEM_OUT: 0, AC: 111, DR: 0 sub ['$1', '$2']
+DEBUG:root:TICK: 81, PC: 3, ADDR: 2, MEM_OUT: 1, AC: 111, DR: 0 sub ['$1', '$2']
+DEBUG:root:TICK: 82, PC: 3, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 0 sub ['$1', '$2']
+DEBUG:root:TICK: 83, PC: 3, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 sub ['$1', '$2']
+DEBUG:root:TICK: 84, PC: 3, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 sub ['$1', '$2']
+DEBUG:root:TICK: 85, PC: 4, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 jl ['$8']
+DEBUG:root:TICK: 86, PC: 4, ADDR: 2, MEM_OUT: 1, AC: 1, DR: 1 jl ['$8']
+DEBUG:root:TICK: 87, PC: 5, ADDR: 55, MEM_OUT: 0, AC: 1, DR: 1 movv ['$0', '$52']
+DEBUG:root:TICK: 88, PC: 5, ADDR: 55, MEM_OUT: 0, AC: 1, DR: 0 movv ['$0', '$52']
+DEBUG:root:TICK: 89, PC: 5, ADDR: 0, MEM_OUT: 111, AC: 1, DR: 0 movv ['$0', '$52']
+DEBUG:root:TICK: 90, PC: 5, ADDR: 0, MEM_OUT: 111, AC: 1, DR: 0 movv ['$0', '$52']
+DEBUG:root:TICK: 91, PC: 5, ADDR: 0, MEM_OUT: 111, AC: 0, DR: 0 movv ['$0', '$52']
+DEBUG:root:input: '\x00'
+DEBUG:root:TICK: 92, PC: 5, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0 movv ['$0', '$52']
+DEBUG:root:TICK: 93, PC: 6, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0 movv ['$69', '$0']
+DEBUG:root:TICK: 94, PC: 6, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0 movv ['$69', '$0']
+DEBUG:root:TICK: 95, PC: 6, ADDR: 72, MEM_OUT: 0, AC: 0, DR: 0 movv ['$69', '$0']
+DEBUG:root:TICK: 96, PC: 6, ADDR: 72, MEM_OUT: 0, AC: 0, DR: 0 movv ['$69', '$0']
+DEBUG:root:TICK: 97, PC: 6, ADDR: 72, MEM_OUT: 0, AC: 0, DR: 0 movv ['$69', '$0']
 INFO:root:input_buffer: < foo
 WARNING:root:Input buffer is empty!
 INFO:root:output_buffer: > 'foo'
 foo
-instr_counter: 11  ticks: 57
+instr_counter: 21  ticks: 97
 ```
 
 Пример проверки исходного кода:
@@ -397,20 +445,22 @@ instr_counter: 11  ticks: 57
 ``` shell
 $ poetry run pytest . -v
 ========================================================================= test session starts =========================================================================
-platform darwin -- Python 3.12.2, pytest-7.4.4, pluggy-1.4.0 -- /Users/anvisero/Desktop/ITMO/3course/1semester/Архитектура компьютера/lab3/.venv/bin/python
+platform darwin -- Python 3.11.7, pytest-7.4.4, pluggy-1.4.0 -- /Users/anvisero/Library/Caches/pypoetry/virtualenvs/lab3-TZmuoKSD-py3.11/bin/python
 cachedir: .pytest_cache
 rootdir: /Users/anvisero/Desktop/ITMO/3course/1semester/Архитектура компьютера/lab3
 configfile: pyproject.toml
 plugins: golden-0.2.2
-collected 3 items                                                                                                                                                     
+collected 5 items                                                                                                                                                     
 
-integration_test.py::test_translator_and_machine[golden/cat.yml] PASSED                                                                                         [ 33%]
-integration_test.py::test_translator_and_machine[golden/hello.yml] PASSED                                                                                       [ 66%]
+integration_test.py::test_translator_and_machine[golden/cat.yml] PASSED                                                                                         [ 20%]
+integration_test.py::test_translator_and_machine[golden/prob2.yml] PASSED                                                                                       [ 40%]
+integration_test.py::test_translator_and_machine[golden/hello.yml] PASSED                                                                                       [ 60%]
+integration_test.py::test_translator_and_machine[golden/many_add.yml] PASSED                                                                                    [ 80%]
 integration_test.py::test_translator_and_machine[golden/hello_user_name.yml] PASSED                                                                             [100%]
 
-========================================================================== 3 passed in 0.04s ==========================================================================
+========================================================================== 5 passed in 0.13s ==========================================================================
 $  poetry run ruff check .
-$  lab3 git:(feature) ✗ poetry run ruff format .
+$  poetry run ruff format .
 5 files left unchanged
 ```
 

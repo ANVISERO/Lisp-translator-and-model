@@ -1,0 +1,579 @@
+in_source: |-
+  (
+      ( defvar W " W " )
+      ( defvar h " h " )
+      ( defvar a " a " )
+      ( defvar t " t " )
+      ( defvar i " i " )
+      ( defvar s " s " )
+      ( defvar tab " " )
+      ( defvar y " y " )
+      ( defvar o " o " )
+      ( defvar u " u " )
+      ( defvar r " r " )
+      ( defvar n " n " )
+      ( defvar m " m " )
+      ( defvar e " e " )
+      ( defvar quest " ? " )
+      ( defvar tran " \n " )
+
+      ( defvar H " H " )
+      ( defvar l " l " )
+      ( defvar comma " , " )
+      ( defvar exclam " ! " )
+
+      ( defvar name )
+      ( defvar fir 0 )
+      ( defvar sec 1 )
+
+      ( print W )
+      ( print h )
+      ( print a )
+      ( print t )
+      ( print tab )
+      ( print i )
+      ( print s )
+      ( print tab )
+      ( print y )
+      ( print o )
+      ( print u )
+      ( print r )
+      ( print tab )
+      ( print n )
+      ( print a )
+      ( print m )
+      ( print e )
+      ( print quest )
+      ( print tran )
+
+      ( print H )
+      ( print e )
+      ( print l )
+      ( print l )
+      ( print o )
+      ( print comma )
+      ( print tab )
+
+      (
+          loop ( < fir sec )
+          (
+              ( setq name ( read ) )
+              ( print name )
+          )
+      )
+      ( print exclam )
+  )
+in_stdin: |-
+  Alice
+out_code: |-
+  [{"opcode": "movv", "arg": ["$0", "W"]},
+   {"opcode": "movv", "arg": ["$1", "h"]},
+   {"opcode": "movv", "arg": ["$2", "a"]},
+   {"opcode": "movv", "arg": ["$3", "t"]},
+   {"opcode": "movv", "arg": ["$4", "i"]},
+   {"opcode": "movv", "arg": ["$5", "s"]},
+   {"opcode": "movv", "arg": ["$6", " "]},
+   {"opcode": "movv", "arg": ["$7", "y"]},
+   {"opcode": "movv", "arg": ["$8", "o"]},
+   {"opcode": "movv", "arg": ["$9", "u"]},
+   {"opcode": "movv", "arg": ["$10", "r"]},
+   {"opcode": "movv", "arg": ["$11", "n"]},
+   {"opcode": "movv", "arg": ["$12", "m"]},
+   {"opcode": "movv", "arg": ["$13", "e"]},
+   {"opcode": "movv", "arg": ["$14", "?"]},
+   {"opcode": "movv", "arg": ["$15", "\n"]},
+   {"opcode": "movv", "arg": ["$16", "H"]},
+   {"opcode": "movv", "arg": ["$17", "l"]},
+   {"opcode": "movv", "arg": ["$18", ","]},
+   {"opcode": "movv", "arg": ["$19", "!"]},
+   {"opcode": "movv", "arg": ["$20", " "]},
+   {"opcode": "movv", "arg": ["$21", 0]},
+   {"opcode": "movv", "arg": ["$22", 1]},
+   {"opcode": "movv", "arg": ["$69", "$0"]},
+   {"opcode": "movv", "arg": ["$69", "$1"]},
+   {"opcode": "movv", "arg": ["$69", "$2"]},
+   {"opcode": "movv", "arg": ["$69", "$3"]},
+   {"opcode": "movv", "arg": ["$69", "$6"]},
+   {"opcode": "movv", "arg": ["$69", "$4"]},
+   {"opcode": "movv", "arg": ["$69", "$5"]},
+   {"opcode": "movv", "arg": ["$69", "$6"]},
+   {"opcode": "movv", "arg": ["$69", "$7"]},
+   {"opcode": "movv", "arg": ["$69", "$8"]},
+   {"opcode": "movv", "arg": ["$69", "$9"]},
+   {"opcode": "movv", "arg": ["$69", "$10"]},
+   {"opcode": "movv", "arg": ["$69", "$6"]},
+   {"opcode": "movv", "arg": ["$69", "$11"]},
+   {"opcode": "movv", "arg": ["$69", "$2"]},
+   {"opcode": "movv", "arg": ["$69", "$12"]},
+   {"opcode": "movv", "arg": ["$69", "$13"]},
+   {"opcode": "movv", "arg": ["$69", "$14"]},
+   {"opcode": "movv", "arg": ["$69", "$15"]},
+   {"opcode": "movv", "arg": ["$69", "$16"]},
+   {"opcode": "movv", "arg": ["$69", "$13"]},
+   {"opcode": "movv", "arg": ["$69", "$17"]},
+   {"opcode": "movv", "arg": ["$69", "$17"]},
+   {"opcode": "movv", "arg": ["$69", "$8"]},
+   {"opcode": "movv", "arg": ["$69", "$18"]},
+   {"opcode": "movv", "arg": ["$69", "$6"]},
+   {"opcode": "sub", "arg": ["$21", "$22"]},
+   {"opcode": "jl", "arg": ["$54"]},
+   {"opcode": "movv", "arg": ["$20", "$52"]},
+   {"opcode": "movv", "arg": ["$69", "$20"]},
+   {"opcode": "jp", "arg": ["$49"]},
+   {"opcode": "movv", "arg": ["$69", "$19"]},
+   {"opcode": "halt"}]
+out_stdout: |
+  source LoC: 284 code instr: 56
+  ============================================================
+  Hello, Alice!
+  instr_counter: 78  ticks: 383
+out_log: |
+  DEBUG   machine:simulation    TICK: 0, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0 movv ['$0', 'W']
+  DEBUG   machine:tick          TICK: 1, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0 movv ['$0', 'W']
+  DEBUG   machine:tick          TICK: 2, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 87 movv ['$0', 'W']
+  DEBUG   machine:tick          TICK: 3, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 87, DR: 87 movv ['$0', 'W']
+  DEBUG   machine:write         input: 'W'
+  DEBUG   machine:tick          TICK: 4, PC: 0, ADDR: 0, MEM_OUT: 87, AC: 87, DR: 87 movv ['$0', 'W']
+  DEBUG   machine:tick          TICK: 5, PC: 1, ADDR: 1, MEM_OUT: 0, AC: 87, DR: 87 movv ['$1', 'h']
+  DEBUG   machine:tick          TICK: 6, PC: 1, ADDR: 1, MEM_OUT: 0, AC: 87, DR: 104 movv ['$1', 'h']
+  DEBUG   machine:tick          TICK: 7, PC: 1, ADDR: 1, MEM_OUT: 0, AC: 104, DR: 104 movv ['$1', 'h']
+  DEBUG   machine:write         input: 'h'
+  DEBUG   machine:tick          TICK: 8, PC: 1, ADDR: 1, MEM_OUT: 104, AC: 104, DR: 104 movv ['$1', 'h']
+  DEBUG   machine:tick          TICK: 9, PC: 2, ADDR: 2, MEM_OUT: 0, AC: 104, DR: 104 movv ['$2', 'a']
+  DEBUG   machine:tick          TICK: 10, PC: 2, ADDR: 2, MEM_OUT: 0, AC: 104, DR: 97 movv ['$2', 'a']
+  DEBUG   machine:tick          TICK: 11, PC: 2, ADDR: 2, MEM_OUT: 0, AC: 97, DR: 97 movv ['$2', 'a']
+  DEBUG   machine:write         input: 'a'
+  DEBUG   machine:tick          TICK: 12, PC: 2, ADDR: 2, MEM_OUT: 97, AC: 97, DR: 97 movv ['$2', 'a']
+  DEBUG   machine:tick          TICK: 13, PC: 3, ADDR: 3, MEM_OUT: 0, AC: 97, DR: 97 movv ['$3', 't']
+  DEBUG   machine:tick          TICK: 14, PC: 3, ADDR: 3, MEM_OUT: 0, AC: 97, DR: 116 movv ['$3', 't']
+  DEBUG   machine:tick          TICK: 15, PC: 3, ADDR: 3, MEM_OUT: 0, AC: 116, DR: 116 movv ['$3', 't']
+  DEBUG   machine:write         input: 't'
+  DEBUG   machine:tick          TICK: 16, PC: 3, ADDR: 3, MEM_OUT: 116, AC: 116, DR: 116 movv ['$3', 't']
+  DEBUG   machine:tick          TICK: 17, PC: 4, ADDR: 4, MEM_OUT: 0, AC: 116, DR: 116 movv ['$4', 'i']
+  DEBUG   machine:tick          TICK: 18, PC: 4, ADDR: 4, MEM_OUT: 0, AC: 116, DR: 105 movv ['$4', 'i']
+  DEBUG   machine:tick          TICK: 19, PC: 4, ADDR: 4, MEM_OUT: 0, AC: 105, DR: 105 movv ['$4', 'i']
+  DEBUG   machine:write         input: 'i'
+  DEBUG   machine:tick          TICK: 20, PC: 4, ADDR: 4, MEM_OUT: 105, AC: 105, DR: 105 movv ['$4', 'i']
+  DEBUG   machine:tick          TICK: 21, PC: 5, ADDR: 5, MEM_OUT: 0, AC: 105, DR: 105 movv ['$5', 's']
+  DEBUG   machine:tick          TICK: 22, PC: 5, ADDR: 5, MEM_OUT: 0, AC: 105, DR: 115 movv ['$5', 's']
+  DEBUG   machine:tick          TICK: 23, PC: 5, ADDR: 5, MEM_OUT: 0, AC: 115, DR: 115 movv ['$5', 's']
+  DEBUG   machine:write         input: 's'
+  DEBUG   machine:tick          TICK: 24, PC: 5, ADDR: 5, MEM_OUT: 115, AC: 115, DR: 115 movv ['$5', 's']
+  DEBUG   machine:tick          TICK: 25, PC: 6, ADDR: 6, MEM_OUT: 0, AC: 115, DR: 115 movv ['$6', ' ']
+  DEBUG   machine:tick          TICK: 26, PC: 6, ADDR: 6, MEM_OUT: 0, AC: 115, DR: 32 movv ['$6', ' ']
+  DEBUG   machine:tick          TICK: 27, PC: 6, ADDR: 6, MEM_OUT: 0, AC: 32, DR: 32 movv ['$6', ' ']
+  DEBUG   machine:write         input: ' '
+  DEBUG   machine:tick          TICK: 28, PC: 6, ADDR: 6, MEM_OUT: 32, AC: 32, DR: 32 movv ['$6', ' ']
+  DEBUG   machine:tick          TICK: 29, PC: 7, ADDR: 7, MEM_OUT: 0, AC: 32, DR: 32 movv ['$7', 'y']
+  DEBUG   machine:tick          TICK: 30, PC: 7, ADDR: 7, MEM_OUT: 0, AC: 32, DR: 121 movv ['$7', 'y']
+  DEBUG   machine:tick          TICK: 31, PC: 7, ADDR: 7, MEM_OUT: 0, AC: 121, DR: 121 movv ['$7', 'y']
+  DEBUG   machine:write         input: 'y'
+  DEBUG   machine:tick          TICK: 32, PC: 7, ADDR: 7, MEM_OUT: 121, AC: 121, DR: 121 movv ['$7', 'y']
+  DEBUG   machine:tick          TICK: 33, PC: 8, ADDR: 8, MEM_OUT: 0, AC: 121, DR: 121 movv ['$8', 'o']
+  DEBUG   machine:tick          TICK: 34, PC: 8, ADDR: 8, MEM_OUT: 0, AC: 121, DR: 111 movv ['$8', 'o']
+  DEBUG   machine:tick          TICK: 35, PC: 8, ADDR: 8, MEM_OUT: 0, AC: 111, DR: 111 movv ['$8', 'o']
+  DEBUG   machine:write         input: 'o'
+  DEBUG   machine:tick          TICK: 36, PC: 8, ADDR: 8, MEM_OUT: 111, AC: 111, DR: 111 movv ['$8', 'o']
+  DEBUG   machine:tick          TICK: 37, PC: 9, ADDR: 9, MEM_OUT: 0, AC: 111, DR: 111 movv ['$9', 'u']
+  DEBUG   machine:tick          TICK: 38, PC: 9, ADDR: 9, MEM_OUT: 0, AC: 111, DR: 117 movv ['$9', 'u']
+  DEBUG   machine:tick          TICK: 39, PC: 9, ADDR: 9, MEM_OUT: 0, AC: 117, DR: 117 movv ['$9', 'u']
+  DEBUG   machine:write         input: 'u'
+  DEBUG   machine:tick          TICK: 40, PC: 9, ADDR: 9, MEM_OUT: 117, AC: 117, DR: 117 movv ['$9', 'u']
+  DEBUG   machine:tick          TICK: 41, PC: 10, ADDR: 10, MEM_OUT: 0, AC: 117, DR: 117 movv ['$10', 'r']
+  DEBUG   machine:tick          TICK: 42, PC: 10, ADDR: 10, MEM_OUT: 0, AC: 117, DR: 114 movv ['$10', 'r']
+  DEBUG   machine:tick          TICK: 43, PC: 10, ADDR: 10, MEM_OUT: 0, AC: 114, DR: 114 movv ['$10', 'r']
+  DEBUG   machine:write         input: 'r'
+  DEBUG   machine:tick          TICK: 44, PC: 10, ADDR: 10, MEM_OUT: 114, AC: 114, DR: 114 movv ['$10', 'r']
+  DEBUG   machine:tick          TICK: 45, PC: 11, ADDR: 11, MEM_OUT: 0, AC: 114, DR: 114 movv ['$11', 'n']
+  DEBUG   machine:tick          TICK: 46, PC: 11, ADDR: 11, MEM_OUT: 0, AC: 114, DR: 110 movv ['$11', 'n']
+  DEBUG   machine:tick          TICK: 47, PC: 11, ADDR: 11, MEM_OUT: 0, AC: 110, DR: 110 movv ['$11', 'n']
+  DEBUG   machine:write         input: 'n'
+  DEBUG   machine:tick          TICK: 48, PC: 11, ADDR: 11, MEM_OUT: 110, AC: 110, DR: 110 movv ['$11', 'n']
+  DEBUG   machine:tick          TICK: 49, PC: 12, ADDR: 12, MEM_OUT: 0, AC: 110, DR: 110 movv ['$12', 'm']
+  DEBUG   machine:tick          TICK: 50, PC: 12, ADDR: 12, MEM_OUT: 0, AC: 110, DR: 109 movv ['$12', 'm']
+  DEBUG   machine:tick          TICK: 51, PC: 12, ADDR: 12, MEM_OUT: 0, AC: 109, DR: 109 movv ['$12', 'm']
+  DEBUG   machine:write         input: 'm'
+  DEBUG   machine:tick          TICK: 52, PC: 12, ADDR: 12, MEM_OUT: 109, AC: 109, DR: 109 movv ['$12', 'm']
+  DEBUG   machine:tick          TICK: 53, PC: 13, ADDR: 13, MEM_OUT: 0, AC: 109, DR: 109 movv ['$13', 'e']
+  DEBUG   machine:tick          TICK: 54, PC: 13, ADDR: 13, MEM_OUT: 0, AC: 109, DR: 101 movv ['$13', 'e']
+  DEBUG   machine:tick          TICK: 55, PC: 13, ADDR: 13, MEM_OUT: 0, AC: 101, DR: 101 movv ['$13', 'e']
+  DEBUG   machine:write         input: 'e'
+  DEBUG   machine:tick          TICK: 56, PC: 13, ADDR: 13, MEM_OUT: 101, AC: 101, DR: 101 movv ['$13', 'e']
+  DEBUG   machine:tick          TICK: 57, PC: 14, ADDR: 14, MEM_OUT: 0, AC: 101, DR: 101 movv ['$14', '?']
+  DEBUG   machine:tick          TICK: 58, PC: 14, ADDR: 14, MEM_OUT: 0, AC: 101, DR: 63 movv ['$14', '?']
+  DEBUG   machine:tick          TICK: 59, PC: 14, ADDR: 14, MEM_OUT: 0, AC: 63, DR: 63 movv ['$14', '?']
+  DEBUG   machine:write         input: '?'
+  DEBUG   machine:tick          TICK: 60, PC: 14, ADDR: 14, MEM_OUT: 63, AC: 63, DR: 63 movv ['$14', '?']
+  DEBUG   machine:tick          TICK: 61, PC: 15, ADDR: 15, MEM_OUT: 0, AC: 63, DR: 63 movv ['$15', '\n']
+  DEBUG   machine:tick          TICK: 62, PC: 15, ADDR: 15, MEM_OUT: 0, AC: 63, DR: 10 movv ['$15', '\n']
+  DEBUG   machine:tick          TICK: 63, PC: 15, ADDR: 15, MEM_OUT: 0, AC: 10, DR: 10 movv ['$15', '\n']
+  DEBUG   machine:write         input: '\n'
+  DEBUG   machine:tick          TICK: 64, PC: 15, ADDR: 15, MEM_OUT: 10, AC: 10, DR: 10 movv ['$15', '\n']
+  DEBUG   machine:tick          TICK: 65, PC: 16, ADDR: 16, MEM_OUT: 0, AC: 10, DR: 10 movv ['$16', 'H']
+  DEBUG   machine:tick          TICK: 66, PC: 16, ADDR: 16, MEM_OUT: 0, AC: 10, DR: 72 movv ['$16', 'H']
+  DEBUG   machine:tick          TICK: 67, PC: 16, ADDR: 16, MEM_OUT: 0, AC: 72, DR: 72 movv ['$16', 'H']
+  DEBUG   machine:write         input: 'H'
+  DEBUG   machine:tick          TICK: 68, PC: 16, ADDR: 16, MEM_OUT: 72, AC: 72, DR: 72 movv ['$16', 'H']
+  DEBUG   machine:tick          TICK: 69, PC: 17, ADDR: 17, MEM_OUT: 0, AC: 72, DR: 72 movv ['$17', 'l']
+  DEBUG   machine:tick          TICK: 70, PC: 17, ADDR: 17, MEM_OUT: 0, AC: 72, DR: 108 movv ['$17', 'l']
+  DEBUG   machine:tick          TICK: 71, PC: 17, ADDR: 17, MEM_OUT: 0, AC: 108, DR: 108 movv ['$17', 'l']
+  DEBUG   machine:write         input: 'l'
+  DEBUG   machine:tick          TICK: 72, PC: 17, ADDR: 17, MEM_OUT: 108, AC: 108, DR: 108 movv ['$17', 'l']
+  DEBUG   machine:tick          TICK: 73, PC: 18, ADDR: 18, MEM_OUT: 0, AC: 108, DR: 108 movv ['$18', ',']
+  DEBUG   machine:tick          TICK: 74, PC: 18, ADDR: 18, MEM_OUT: 0, AC: 108, DR: 44 movv ['$18', ',']
+  DEBUG   machine:tick          TICK: 75, PC: 18, ADDR: 18, MEM_OUT: 0, AC: 44, DR: 44 movv ['$18', ',']
+  DEBUG   machine:write         input: ','
+  DEBUG   machine:tick          TICK: 76, PC: 18, ADDR: 18, MEM_OUT: 44, AC: 44, DR: 44 movv ['$18', ',']
+  DEBUG   machine:tick          TICK: 77, PC: 19, ADDR: 19, MEM_OUT: 0, AC: 44, DR: 44 movv ['$19', '!']
+  DEBUG   machine:tick          TICK: 78, PC: 19, ADDR: 19, MEM_OUT: 0, AC: 44, DR: 33 movv ['$19', '!']
+  DEBUG   machine:tick          TICK: 79, PC: 19, ADDR: 19, MEM_OUT: 0, AC: 33, DR: 33 movv ['$19', '!']
+  DEBUG   machine:write         input: '!'
+  DEBUG   machine:tick          TICK: 80, PC: 19, ADDR: 19, MEM_OUT: 33, AC: 33, DR: 33 movv ['$19', '!']
+  DEBUG   machine:tick          TICK: 81, PC: 20, ADDR: 20, MEM_OUT: 0, AC: 33, DR: 33 movv ['$20', ' ']
+  DEBUG   machine:tick          TICK: 82, PC: 20, ADDR: 20, MEM_OUT: 0, AC: 33, DR: 32 movv ['$20', ' ']
+  DEBUG   machine:tick          TICK: 83, PC: 20, ADDR: 20, MEM_OUT: 0, AC: 32, DR: 32 movv ['$20', ' ']
+  DEBUG   machine:write         input: ' '
+  DEBUG   machine:tick          TICK: 84, PC: 20, ADDR: 20, MEM_OUT: 32, AC: 32, DR: 32 movv ['$20', ' ']
+  DEBUG   machine:tick          TICK: 85, PC: 21, ADDR: 21, MEM_OUT: 0, AC: 32, DR: 32 movv ['$21', 0]
+  DEBUG   machine:tick          TICK: 86, PC: 21, ADDR: 21, MEM_OUT: 0, AC: 32, DR: 0 movv ['$21', 0]
+  DEBUG   machine:tick          TICK: 87, PC: 21, ADDR: 21, MEM_OUT: 0, AC: 0, DR: 0 movv ['$21', 0]
+  DEBUG   machine:write         input: '\x00'
+  DEBUG   machine:tick          TICK: 88, PC: 21, ADDR: 21, MEM_OUT: 0, AC: 0, DR: 0 movv ['$21', 0]
+  DEBUG   machine:tick          TICK: 89, PC: 22, ADDR: 22, MEM_OUT: 0, AC: 0, DR: 0 movv ['$22', 1]
+  DEBUG   machine:tick          TICK: 90, PC: 22, ADDR: 22, MEM_OUT: 0, AC: 0, DR: 1 movv ['$22', 1]
+  DEBUG   machine:tick          TICK: 91, PC: 22, ADDR: 22, MEM_OUT: 0, AC: 1, DR: 1 movv ['$22', 1]
+  DEBUG   machine:write         input: '\x01'
+  DEBUG   machine:tick          TICK: 92, PC: 22, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 movv ['$22', 1]
+  DEBUG   machine:tick          TICK: 93, PC: 23, ADDR: 0, MEM_OUT: 87, AC: 1, DR: 1 movv ['$69', '$0']
+  DEBUG   machine:tick          TICK: 94, PC: 23, ADDR: 0, MEM_OUT: 87, AC: 1, DR: 87 movv ['$69', '$0']
+  DEBUG   machine:tick          TICK: 95, PC: 23, ADDR: 69, MEM_OUT: 0, AC: 1, DR: 87 movv ['$69', '$0']
+  DEBUG   machine:tick          TICK: 96, PC: 23, ADDR: 69, MEM_OUT: 0, AC: 1, DR: 87 movv ['$69', '$0']
+  DEBUG   machine:tick          TICK: 97, PC: 23, ADDR: 69, MEM_OUT: 0, AC: 87, DR: 87 movv ['$69', '$0']
+  DEBUG   machine:write         output: '' << 'W'
+  DEBUG   machine:tick          TICK: 98, PC: 23, ADDR: 69, MEM_OUT: 87, AC: 87, DR: 87 movv ['$69', '$0']
+  DEBUG   machine:tick          TICK: 99, PC: 24, ADDR: 1, MEM_OUT: 104, AC: 87, DR: 87 movv ['$69', '$1']
+  DEBUG   machine:tick          TICK: 100, PC: 24, ADDR: 1, MEM_OUT: 104, AC: 87, DR: 104 movv ['$69', '$1']
+  DEBUG   machine:tick          TICK: 101, PC: 24, ADDR: 70, MEM_OUT: 0, AC: 87, DR: 104 movv ['$69', '$1']
+  DEBUG   machine:tick          TICK: 102, PC: 24, ADDR: 70, MEM_OUT: 0, AC: 87, DR: 104 movv ['$69', '$1']
+  DEBUG   machine:tick          TICK: 103, PC: 24, ADDR: 70, MEM_OUT: 0, AC: 104, DR: 104 movv ['$69', '$1']
+  DEBUG   machine:write         output: 'W' << 'h'
+  DEBUG   machine:tick          TICK: 104, PC: 24, ADDR: 70, MEM_OUT: 104, AC: 104, DR: 104 movv ['$69', '$1']
+  DEBUG   machine:tick          TICK: 105, PC: 25, ADDR: 2, MEM_OUT: 97, AC: 104, DR: 104 movv ['$69', '$2']
+  DEBUG   machine:tick          TICK: 106, PC: 25, ADDR: 2, MEM_OUT: 97, AC: 104, DR: 97 movv ['$69', '$2']
+  DEBUG   machine:tick          TICK: 107, PC: 25, ADDR: 71, MEM_OUT: 0, AC: 104, DR: 97 movv ['$69', '$2']
+  DEBUG   machine:tick          TICK: 108, PC: 25, ADDR: 71, MEM_OUT: 0, AC: 104, DR: 97 movv ['$69', '$2']
+  DEBUG   machine:tick          TICK: 109, PC: 25, ADDR: 71, MEM_OUT: 0, AC: 97, DR: 97 movv ['$69', '$2']
+  DEBUG   machine:write         output: 'Wh' << 'a'
+  DEBUG   machine:tick          TICK: 110, PC: 25, ADDR: 71, MEM_OUT: 97, AC: 97, DR: 97 movv ['$69', '$2']
+  DEBUG   machine:tick          TICK: 111, PC: 26, ADDR: 3, MEM_OUT: 116, AC: 97, DR: 97 movv ['$69', '$3']
+  DEBUG   machine:tick          TICK: 112, PC: 26, ADDR: 3, MEM_OUT: 116, AC: 97, DR: 116 movv ['$69', '$3']
+  DEBUG   machine:tick          TICK: 113, PC: 26, ADDR: 72, MEM_OUT: 0, AC: 97, DR: 116 movv ['$69', '$3']
+  DEBUG   machine:tick          TICK: 114, PC: 26, ADDR: 72, MEM_OUT: 0, AC: 97, DR: 116 movv ['$69', '$3']
+  DEBUG   machine:tick          TICK: 115, PC: 26, ADDR: 72, MEM_OUT: 0, AC: 116, DR: 116 movv ['$69', '$3']
+  DEBUG   machine:write         output: 'Wha' << 't'
+  DEBUG   machine:tick          TICK: 116, PC: 26, ADDR: 72, MEM_OUT: 116, AC: 116, DR: 116 movv ['$69', '$3']
+  DEBUG   machine:tick          TICK: 117, PC: 27, ADDR: 6, MEM_OUT: 32, AC: 116, DR: 116 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 118, PC: 27, ADDR: 6, MEM_OUT: 32, AC: 116, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 119, PC: 27, ADDR: 73, MEM_OUT: 0, AC: 116, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 120, PC: 27, ADDR: 73, MEM_OUT: 0, AC: 116, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 121, PC: 27, ADDR: 73, MEM_OUT: 0, AC: 32, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:write         output: 'What' << ' '
+  DEBUG   machine:tick          TICK: 122, PC: 27, ADDR: 73, MEM_OUT: 32, AC: 32, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 123, PC: 28, ADDR: 4, MEM_OUT: 105, AC: 32, DR: 32 movv ['$69', '$4']
+  DEBUG   machine:tick          TICK: 124, PC: 28, ADDR: 4, MEM_OUT: 105, AC: 32, DR: 105 movv ['$69', '$4']
+  DEBUG   machine:tick          TICK: 125, PC: 28, ADDR: 74, MEM_OUT: 0, AC: 32, DR: 105 movv ['$69', '$4']
+  DEBUG   machine:tick          TICK: 126, PC: 28, ADDR: 74, MEM_OUT: 0, AC: 32, DR: 105 movv ['$69', '$4']
+  DEBUG   machine:tick          TICK: 127, PC: 28, ADDR: 74, MEM_OUT: 0, AC: 105, DR: 105 movv ['$69', '$4']
+  DEBUG   machine:write         output: 'What ' << 'i'
+  DEBUG   machine:tick          TICK: 128, PC: 28, ADDR: 74, MEM_OUT: 105, AC: 105, DR: 105 movv ['$69', '$4']
+  DEBUG   machine:tick          TICK: 129, PC: 29, ADDR: 5, MEM_OUT: 115, AC: 105, DR: 105 movv ['$69', '$5']
+  DEBUG   machine:tick          TICK: 130, PC: 29, ADDR: 5, MEM_OUT: 115, AC: 105, DR: 115 movv ['$69', '$5']
+  DEBUG   machine:tick          TICK: 131, PC: 29, ADDR: 75, MEM_OUT: 0, AC: 105, DR: 115 movv ['$69', '$5']
+  DEBUG   machine:tick          TICK: 132, PC: 29, ADDR: 75, MEM_OUT: 0, AC: 105, DR: 115 movv ['$69', '$5']
+  DEBUG   machine:tick          TICK: 133, PC: 29, ADDR: 75, MEM_OUT: 0, AC: 115, DR: 115 movv ['$69', '$5']
+  DEBUG   machine:write         output: 'What i' << 's'
+  DEBUG   machine:tick          TICK: 134, PC: 29, ADDR: 75, MEM_OUT: 115, AC: 115, DR: 115 movv ['$69', '$5']
+  DEBUG   machine:tick          TICK: 135, PC: 30, ADDR: 6, MEM_OUT: 32, AC: 115, DR: 115 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 136, PC: 30, ADDR: 6, MEM_OUT: 32, AC: 115, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 137, PC: 30, ADDR: 76, MEM_OUT: 0, AC: 115, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 138, PC: 30, ADDR: 76, MEM_OUT: 0, AC: 115, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 139, PC: 30, ADDR: 76, MEM_OUT: 0, AC: 32, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:write         output: 'What is' << ' '
+  DEBUG   machine:tick          TICK: 140, PC: 30, ADDR: 76, MEM_OUT: 32, AC: 32, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 141, PC: 31, ADDR: 7, MEM_OUT: 121, AC: 32, DR: 32 movv ['$69', '$7']
+  DEBUG   machine:tick          TICK: 142, PC: 31, ADDR: 7, MEM_OUT: 121, AC: 32, DR: 121 movv ['$69', '$7']
+  DEBUG   machine:tick          TICK: 143, PC: 31, ADDR: 77, MEM_OUT: 0, AC: 32, DR: 121 movv ['$69', '$7']
+  DEBUG   machine:tick          TICK: 144, PC: 31, ADDR: 77, MEM_OUT: 0, AC: 32, DR: 121 movv ['$69', '$7']
+  DEBUG   machine:tick          TICK: 145, PC: 31, ADDR: 77, MEM_OUT: 0, AC: 121, DR: 121 movv ['$69', '$7']
+  DEBUG   machine:write         output: 'What is ' << 'y'
+  DEBUG   machine:tick          TICK: 146, PC: 31, ADDR: 77, MEM_OUT: 121, AC: 121, DR: 121 movv ['$69', '$7']
+  DEBUG   machine:tick          TICK: 147, PC: 32, ADDR: 8, MEM_OUT: 111, AC: 121, DR: 121 movv ['$69', '$8']
+  DEBUG   machine:tick          TICK: 148, PC: 32, ADDR: 8, MEM_OUT: 111, AC: 121, DR: 111 movv ['$69', '$8']
+  DEBUG   machine:tick          TICK: 149, PC: 32, ADDR: 78, MEM_OUT: 0, AC: 121, DR: 111 movv ['$69', '$8']
+  DEBUG   machine:tick          TICK: 150, PC: 32, ADDR: 78, MEM_OUT: 0, AC: 121, DR: 111 movv ['$69', '$8']
+  DEBUG   machine:tick          TICK: 151, PC: 32, ADDR: 78, MEM_OUT: 0, AC: 111, DR: 111 movv ['$69', '$8']
+  DEBUG   machine:write         output: 'What is y' << 'o'
+  DEBUG   machine:tick          TICK: 152, PC: 32, ADDR: 78, MEM_OUT: 111, AC: 111, DR: 111 movv ['$69', '$8']
+  DEBUG   machine:tick          TICK: 153, PC: 33, ADDR: 9, MEM_OUT: 117, AC: 111, DR: 111 movv ['$69', '$9']
+  DEBUG   machine:tick          TICK: 154, PC: 33, ADDR: 9, MEM_OUT: 117, AC: 111, DR: 117 movv ['$69', '$9']
+  DEBUG   machine:tick          TICK: 155, PC: 33, ADDR: 79, MEM_OUT: 0, AC: 111, DR: 117 movv ['$69', '$9']
+  DEBUG   machine:tick          TICK: 156, PC: 33, ADDR: 79, MEM_OUT: 0, AC: 111, DR: 117 movv ['$69', '$9']
+  DEBUG   machine:tick          TICK: 157, PC: 33, ADDR: 79, MEM_OUT: 0, AC: 117, DR: 117 movv ['$69', '$9']
+  DEBUG   machine:write         output: 'What is yo' << 'u'
+  DEBUG   machine:tick          TICK: 158, PC: 33, ADDR: 79, MEM_OUT: 117, AC: 117, DR: 117 movv ['$69', '$9']
+  DEBUG   machine:tick          TICK: 159, PC: 34, ADDR: 10, MEM_OUT: 114, AC: 117, DR: 117 movv ['$69', '$10']
+  DEBUG   machine:tick          TICK: 160, PC: 34, ADDR: 10, MEM_OUT: 114, AC: 117, DR: 114 movv ['$69', '$10']
+  DEBUG   machine:tick          TICK: 161, PC: 34, ADDR: 80, MEM_OUT: 0, AC: 117, DR: 114 movv ['$69', '$10']
+  DEBUG   machine:tick          TICK: 162, PC: 34, ADDR: 80, MEM_OUT: 0, AC: 117, DR: 114 movv ['$69', '$10']
+  DEBUG   machine:tick          TICK: 163, PC: 34, ADDR: 80, MEM_OUT: 0, AC: 114, DR: 114 movv ['$69', '$10']
+  DEBUG   machine:write         output: 'What is you' << 'r'
+  DEBUG   machine:tick          TICK: 164, PC: 34, ADDR: 80, MEM_OUT: 114, AC: 114, DR: 114 movv ['$69', '$10']
+  DEBUG   machine:tick          TICK: 165, PC: 35, ADDR: 6, MEM_OUT: 32, AC: 114, DR: 114 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 166, PC: 35, ADDR: 6, MEM_OUT: 32, AC: 114, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 167, PC: 35, ADDR: 81, MEM_OUT: 0, AC: 114, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 168, PC: 35, ADDR: 81, MEM_OUT: 0, AC: 114, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 169, PC: 35, ADDR: 81, MEM_OUT: 0, AC: 32, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:write         output: 'What is your' << ' '
+  DEBUG   machine:tick          TICK: 170, PC: 35, ADDR: 81, MEM_OUT: 32, AC: 32, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 171, PC: 36, ADDR: 11, MEM_OUT: 110, AC: 32, DR: 32 movv ['$69', '$11']
+  DEBUG   machine:tick          TICK: 172, PC: 36, ADDR: 11, MEM_OUT: 110, AC: 32, DR: 110 movv ['$69', '$11']
+  DEBUG   machine:tick          TICK: 173, PC: 36, ADDR: 82, MEM_OUT: 0, AC: 32, DR: 110 movv ['$69', '$11']
+  DEBUG   machine:tick          TICK: 174, PC: 36, ADDR: 82, MEM_OUT: 0, AC: 32, DR: 110 movv ['$69', '$11']
+  DEBUG   machine:tick          TICK: 175, PC: 36, ADDR: 82, MEM_OUT: 0, AC: 110, DR: 110 movv ['$69', '$11']
+  DEBUG   machine:write         output: 'What is your ' << 'n'
+  DEBUG   machine:tick          TICK: 176, PC: 36, ADDR: 82, MEM_OUT: 110, AC: 110, DR: 110 movv ['$69', '$11']
+  DEBUG   machine:tick          TICK: 177, PC: 37, ADDR: 2, MEM_OUT: 97, AC: 110, DR: 110 movv ['$69', '$2']
+  DEBUG   machine:tick          TICK: 178, PC: 37, ADDR: 2, MEM_OUT: 97, AC: 110, DR: 97 movv ['$69', '$2']
+  DEBUG   machine:tick          TICK: 179, PC: 37, ADDR: 83, MEM_OUT: 0, AC: 110, DR: 97 movv ['$69', '$2']
+  DEBUG   machine:tick          TICK: 180, PC: 37, ADDR: 83, MEM_OUT: 0, AC: 110, DR: 97 movv ['$69', '$2']
+  DEBUG   machine:tick          TICK: 181, PC: 37, ADDR: 83, MEM_OUT: 0, AC: 97, DR: 97 movv ['$69', '$2']
+  DEBUG   machine:write         output: 'What is your n' << 'a'
+  DEBUG   machine:tick          TICK: 182, PC: 37, ADDR: 83, MEM_OUT: 97, AC: 97, DR: 97 movv ['$69', '$2']
+  DEBUG   machine:tick          TICK: 183, PC: 38, ADDR: 12, MEM_OUT: 109, AC: 97, DR: 97 movv ['$69', '$12']
+  DEBUG   machine:tick          TICK: 184, PC: 38, ADDR: 12, MEM_OUT: 109, AC: 97, DR: 109 movv ['$69', '$12']
+  DEBUG   machine:tick          TICK: 185, PC: 38, ADDR: 84, MEM_OUT: 0, AC: 97, DR: 109 movv ['$69', '$12']
+  DEBUG   machine:tick          TICK: 186, PC: 38, ADDR: 84, MEM_OUT: 0, AC: 97, DR: 109 movv ['$69', '$12']
+  DEBUG   machine:tick          TICK: 187, PC: 38, ADDR: 84, MEM_OUT: 0, AC: 109, DR: 109 movv ['$69', '$12']
+  DEBUG   machine:write         output: 'What is your na' << 'm'
+  DEBUG   machine:tick          TICK: 188, PC: 38, ADDR: 84, MEM_OUT: 109, AC: 109, DR: 109 movv ['$69', '$12']
+  DEBUG   machine:tick          TICK: 189, PC: 39, ADDR: 13, MEM_OUT: 101, AC: 109, DR: 109 movv ['$69', '$13']
+  DEBUG   machine:tick          TICK: 190, PC: 39, ADDR: 13, MEM_OUT: 101, AC: 109, DR: 101 movv ['$69', '$13']
+  DEBUG   machine:tick          TICK: 191, PC: 39, ADDR: 85, MEM_OUT: 0, AC: 109, DR: 101 movv ['$69', '$13']
+  DEBUG   machine:tick          TICK: 192, PC: 39, ADDR: 85, MEM_OUT: 0, AC: 109, DR: 101 movv ['$69', '$13']
+  DEBUG   machine:tick          TICK: 193, PC: 39, ADDR: 85, MEM_OUT: 0, AC: 101, DR: 101 movv ['$69', '$13']
+  DEBUG   machine:write         output: 'What is your nam' << 'e'
+  DEBUG   machine:tick          TICK: 194, PC: 39, ADDR: 85, MEM_OUT: 101, AC: 101, DR: 101 movv ['$69', '$13']
+  DEBUG   machine:tick          TICK: 195, PC: 40, ADDR: 14, MEM_OUT: 63, AC: 101, DR: 101 movv ['$69', '$14']
+  DEBUG   machine:tick          TICK: 196, PC: 40, ADDR: 14, MEM_OUT: 63, AC: 101, DR: 63 movv ['$69', '$14']
+  DEBUG   machine:tick          TICK: 197, PC: 40, ADDR: 86, MEM_OUT: 0, AC: 101, DR: 63 movv ['$69', '$14']
+  DEBUG   machine:tick          TICK: 198, PC: 40, ADDR: 86, MEM_OUT: 0, AC: 101, DR: 63 movv ['$69', '$14']
+  DEBUG   machine:tick          TICK: 199, PC: 40, ADDR: 86, MEM_OUT: 0, AC: 63, DR: 63 movv ['$69', '$14']
+  DEBUG   machine:write         output: 'What is your name' << '?'
+  DEBUG   machine:tick          TICK: 200, PC: 40, ADDR: 86, MEM_OUT: 63, AC: 63, DR: 63 movv ['$69', '$14']
+  DEBUG   machine:tick          TICK: 201, PC: 41, ADDR: 15, MEM_OUT: 10, AC: 63, DR: 63 movv ['$69', '$15']
+  DEBUG   machine:tick          TICK: 202, PC: 41, ADDR: 15, MEM_OUT: 10, AC: 63, DR: 10 movv ['$69', '$15']
+  DEBUG   machine:tick          TICK: 203, PC: 41, ADDR: 87, MEM_OUT: 0, AC: 63, DR: 10 movv ['$69', '$15']
+  DEBUG   machine:tick          TICK: 204, PC: 41, ADDR: 87, MEM_OUT: 0, AC: 63, DR: 10 movv ['$69', '$15']
+  DEBUG   machine:tick          TICK: 205, PC: 41, ADDR: 87, MEM_OUT: 0, AC: 10, DR: 10 movv ['$69', '$15']
+  DEBUG   machine:write         output: 'What is your name?' << '\n'
+  DEBUG   machine:tick          TICK: 206, PC: 41, ADDR: 87, MEM_OUT: 10, AC: 10, DR: 10 movv ['$69', '$15']
+  INFO    machine:decode_and_execute_instruction output_buffer: > 'What is your name?'
+  DEBUG   machine:tick          TICK: 207, PC: 42, ADDR: 16, MEM_OUT: 72, AC: 10, DR: 10 movv ['$69', '$16']
+  DEBUG   machine:tick          TICK: 208, PC: 42, ADDR: 16, MEM_OUT: 72, AC: 10, DR: 72 movv ['$69', '$16']
+  DEBUG   machine:tick          TICK: 209, PC: 42, ADDR: 69, MEM_OUT: 87, AC: 10, DR: 72 movv ['$69', '$16']
+  DEBUG   machine:tick          TICK: 210, PC: 42, ADDR: 69, MEM_OUT: 87, AC: 10, DR: 72 movv ['$69', '$16']
+  DEBUG   machine:tick          TICK: 211, PC: 42, ADDR: 69, MEM_OUT: 87, AC: 72, DR: 72 movv ['$69', '$16']
+  DEBUG   machine:write         output: '' << 'H'
+  DEBUG   machine:tick          TICK: 212, PC: 42, ADDR: 69, MEM_OUT: 72, AC: 72, DR: 72 movv ['$69', '$16']
+  DEBUG   machine:tick          TICK: 213, PC: 43, ADDR: 13, MEM_OUT: 101, AC: 72, DR: 72 movv ['$69', '$13']
+  DEBUG   machine:tick          TICK: 214, PC: 43, ADDR: 13, MEM_OUT: 101, AC: 72, DR: 101 movv ['$69', '$13']
+  DEBUG   machine:tick          TICK: 215, PC: 43, ADDR: 70, MEM_OUT: 104, AC: 72, DR: 101 movv ['$69', '$13']
+  DEBUG   machine:tick          TICK: 216, PC: 43, ADDR: 70, MEM_OUT: 104, AC: 72, DR: 101 movv ['$69', '$13']
+  DEBUG   machine:tick          TICK: 217, PC: 43, ADDR: 70, MEM_OUT: 104, AC: 101, DR: 101 movv ['$69', '$13']
+  DEBUG   machine:write         output: 'H' << 'e'
+  DEBUG   machine:tick          TICK: 218, PC: 43, ADDR: 70, MEM_OUT: 101, AC: 101, DR: 101 movv ['$69', '$13']
+  DEBUG   machine:tick          TICK: 219, PC: 44, ADDR: 17, MEM_OUT: 108, AC: 101, DR: 101 movv ['$69', '$17']
+  DEBUG   machine:tick          TICK: 220, PC: 44, ADDR: 17, MEM_OUT: 108, AC: 101, DR: 108 movv ['$69', '$17']
+  DEBUG   machine:tick          TICK: 221, PC: 44, ADDR: 71, MEM_OUT: 97, AC: 101, DR: 108 movv ['$69', '$17']
+  DEBUG   machine:tick          TICK: 222, PC: 44, ADDR: 71, MEM_OUT: 97, AC: 101, DR: 108 movv ['$69', '$17']
+  DEBUG   machine:tick          TICK: 223, PC: 44, ADDR: 71, MEM_OUT: 97, AC: 108, DR: 108 movv ['$69', '$17']
+  DEBUG   machine:write         output: 'He' << 'l'
+  DEBUG   machine:tick          TICK: 224, PC: 44, ADDR: 71, MEM_OUT: 108, AC: 108, DR: 108 movv ['$69', '$17']
+  DEBUG   machine:tick          TICK: 225, PC: 45, ADDR: 17, MEM_OUT: 108, AC: 108, DR: 108 movv ['$69', '$17']
+  DEBUG   machine:tick          TICK: 226, PC: 45, ADDR: 17, MEM_OUT: 108, AC: 108, DR: 108 movv ['$69', '$17']
+  DEBUG   machine:tick          TICK: 227, PC: 45, ADDR: 72, MEM_OUT: 116, AC: 108, DR: 108 movv ['$69', '$17']
+  DEBUG   machine:tick          TICK: 228, PC: 45, ADDR: 72, MEM_OUT: 116, AC: 108, DR: 108 movv ['$69', '$17']
+  DEBUG   machine:tick          TICK: 229, PC: 45, ADDR: 72, MEM_OUT: 116, AC: 108, DR: 108 movv ['$69', '$17']
+  DEBUG   machine:write         output: 'Hel' << 'l'
+  DEBUG   machine:tick          TICK: 230, PC: 45, ADDR: 72, MEM_OUT: 108, AC: 108, DR: 108 movv ['$69', '$17']
+  DEBUG   machine:tick          TICK: 231, PC: 46, ADDR: 8, MEM_OUT: 111, AC: 108, DR: 108 movv ['$69', '$8']
+  DEBUG   machine:tick          TICK: 232, PC: 46, ADDR: 8, MEM_OUT: 111, AC: 108, DR: 111 movv ['$69', '$8']
+  DEBUG   machine:tick          TICK: 233, PC: 46, ADDR: 73, MEM_OUT: 32, AC: 108, DR: 111 movv ['$69', '$8']
+  DEBUG   machine:tick          TICK: 234, PC: 46, ADDR: 73, MEM_OUT: 32, AC: 108, DR: 111 movv ['$69', '$8']
+  DEBUG   machine:tick          TICK: 235, PC: 46, ADDR: 73, MEM_OUT: 32, AC: 111, DR: 111 movv ['$69', '$8']
+  DEBUG   machine:write         output: 'Hell' << 'o'
+  DEBUG   machine:tick          TICK: 236, PC: 46, ADDR: 73, MEM_OUT: 111, AC: 111, DR: 111 movv ['$69', '$8']
+  DEBUG   machine:tick          TICK: 237, PC: 47, ADDR: 18, MEM_OUT: 44, AC: 111, DR: 111 movv ['$69', '$18']
+  DEBUG   machine:tick          TICK: 238, PC: 47, ADDR: 18, MEM_OUT: 44, AC: 111, DR: 44 movv ['$69', '$18']
+  DEBUG   machine:tick          TICK: 239, PC: 47, ADDR: 74, MEM_OUT: 105, AC: 111, DR: 44 movv ['$69', '$18']
+  DEBUG   machine:tick          TICK: 240, PC: 47, ADDR: 74, MEM_OUT: 105, AC: 111, DR: 44 movv ['$69', '$18']
+  DEBUG   machine:tick          TICK: 241, PC: 47, ADDR: 74, MEM_OUT: 105, AC: 44, DR: 44 movv ['$69', '$18']
+  DEBUG   machine:write         output: 'Hello' << ','
+  DEBUG   machine:tick          TICK: 242, PC: 47, ADDR: 74, MEM_OUT: 44, AC: 44, DR: 44 movv ['$69', '$18']
+  DEBUG   machine:tick          TICK: 243, PC: 48, ADDR: 6, MEM_OUT: 32, AC: 44, DR: 44 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 244, PC: 48, ADDR: 6, MEM_OUT: 32, AC: 44, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 245, PC: 48, ADDR: 75, MEM_OUT: 115, AC: 44, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 246, PC: 48, ADDR: 75, MEM_OUT: 115, AC: 44, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 247, PC: 48, ADDR: 75, MEM_OUT: 115, AC: 32, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:write         output: 'Hello,' << ' '
+  DEBUG   machine:tick          TICK: 248, PC: 48, ADDR: 75, MEM_OUT: 32, AC: 32, DR: 32 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 249, PC: 49, ADDR: 21, MEM_OUT: 0, AC: 32, DR: 32 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 250, PC: 49, ADDR: 21, MEM_OUT: 0, AC: 32, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 251, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 32, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 252, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 253, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 254, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 255, PC: 50, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 jl ['$54']
+  DEBUG   machine:tick          TICK: 256, PC: 50, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 jl ['$54']
+  DEBUG   machine:tick          TICK: 257, PC: 51, ADDR: 52, MEM_OUT: 65, AC: 1, DR: 1 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 258, PC: 51, ADDR: 52, MEM_OUT: 65, AC: 1, DR: 65 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 259, PC: 51, ADDR: 20, MEM_OUT: 32, AC: 1, DR: 65 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 260, PC: 51, ADDR: 20, MEM_OUT: 32, AC: 1, DR: 65 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 261, PC: 51, ADDR: 20, MEM_OUT: 32, AC: 65, DR: 65 movv ['$20', '$52']
+  DEBUG   machine:write         input: 'A'
+  DEBUG   machine:tick          TICK: 262, PC: 51, ADDR: 20, MEM_OUT: 65, AC: 65, DR: 65 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 263, PC: 52, ADDR: 20, MEM_OUT: 65, AC: 65, DR: 65 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 264, PC: 52, ADDR: 20, MEM_OUT: 65, AC: 65, DR: 65 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 265, PC: 52, ADDR: 76, MEM_OUT: 32, AC: 65, DR: 65 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 266, PC: 52, ADDR: 76, MEM_OUT: 32, AC: 65, DR: 65 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 267, PC: 52, ADDR: 76, MEM_OUT: 32, AC: 65, DR: 65 movv ['$69', '$20']
+  DEBUG   machine:write         output: 'Hello, ' << 'A'
+  DEBUG   machine:tick          TICK: 268, PC: 52, ADDR: 76, MEM_OUT: 65, AC: 65, DR: 65 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 269, PC: 53, ADDR: 76, MEM_OUT: 65, AC: 65, DR: 65 jp ['$49']
+  DEBUG   machine:tick          TICK: 270, PC: 49, ADDR: 76, MEM_OUT: 65, AC: 65, DR: 65 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 271, PC: 49, ADDR: 21, MEM_OUT: 0, AC: 65, DR: 65 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 272, PC: 49, ADDR: 21, MEM_OUT: 0, AC: 65, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 273, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 65, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 274, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 275, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 276, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 277, PC: 50, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 jl ['$54']
+  DEBUG   machine:tick          TICK: 278, PC: 50, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 jl ['$54']
+  DEBUG   machine:tick          TICK: 279, PC: 51, ADDR: 53, MEM_OUT: 108, AC: 1, DR: 1 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 280, PC: 51, ADDR: 53, MEM_OUT: 108, AC: 1, DR: 108 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 281, PC: 51, ADDR: 20, MEM_OUT: 65, AC: 1, DR: 108 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 282, PC: 51, ADDR: 20, MEM_OUT: 65, AC: 1, DR: 108 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 283, PC: 51, ADDR: 20, MEM_OUT: 65, AC: 108, DR: 108 movv ['$20', '$52']
+  DEBUG   machine:write         input: 'l'
+  DEBUG   machine:tick          TICK: 284, PC: 51, ADDR: 20, MEM_OUT: 108, AC: 108, DR: 108 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 285, PC: 52, ADDR: 20, MEM_OUT: 108, AC: 108, DR: 108 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 286, PC: 52, ADDR: 20, MEM_OUT: 108, AC: 108, DR: 108 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 287, PC: 52, ADDR: 77, MEM_OUT: 121, AC: 108, DR: 108 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 288, PC: 52, ADDR: 77, MEM_OUT: 121, AC: 108, DR: 108 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 289, PC: 52, ADDR: 77, MEM_OUT: 121, AC: 108, DR: 108 movv ['$69', '$20']
+  DEBUG   machine:write         output: 'Hello, A' << 'l'
+  DEBUG   machine:tick          TICK: 290, PC: 52, ADDR: 77, MEM_OUT: 108, AC: 108, DR: 108 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 291, PC: 53, ADDR: 77, MEM_OUT: 108, AC: 108, DR: 108 jp ['$49']
+  DEBUG   machine:tick          TICK: 292, PC: 49, ADDR: 77, MEM_OUT: 108, AC: 108, DR: 108 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 293, PC: 49, ADDR: 21, MEM_OUT: 0, AC: 108, DR: 108 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 294, PC: 49, ADDR: 21, MEM_OUT: 0, AC: 108, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 295, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 108, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 296, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 297, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 298, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 299, PC: 50, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 jl ['$54']
+  DEBUG   machine:tick          TICK: 300, PC: 50, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 jl ['$54']
+  DEBUG   machine:tick          TICK: 301, PC: 51, ADDR: 54, MEM_OUT: 105, AC: 1, DR: 1 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 302, PC: 51, ADDR: 54, MEM_OUT: 105, AC: 1, DR: 105 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 303, PC: 51, ADDR: 20, MEM_OUT: 108, AC: 1, DR: 105 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 304, PC: 51, ADDR: 20, MEM_OUT: 108, AC: 1, DR: 105 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 305, PC: 51, ADDR: 20, MEM_OUT: 108, AC: 105, DR: 105 movv ['$20', '$52']
+  DEBUG   machine:write         input: 'i'
+  DEBUG   machine:tick          TICK: 306, PC: 51, ADDR: 20, MEM_OUT: 105, AC: 105, DR: 105 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 307, PC: 52, ADDR: 20, MEM_OUT: 105, AC: 105, DR: 105 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 308, PC: 52, ADDR: 20, MEM_OUT: 105, AC: 105, DR: 105 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 309, PC: 52, ADDR: 78, MEM_OUT: 111, AC: 105, DR: 105 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 310, PC: 52, ADDR: 78, MEM_OUT: 111, AC: 105, DR: 105 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 311, PC: 52, ADDR: 78, MEM_OUT: 111, AC: 105, DR: 105 movv ['$69', '$20']
+  DEBUG   machine:write         output: 'Hello, Al' << 'i'
+  DEBUG   machine:tick          TICK: 312, PC: 52, ADDR: 78, MEM_OUT: 105, AC: 105, DR: 105 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 313, PC: 53, ADDR: 78, MEM_OUT: 105, AC: 105, DR: 105 jp ['$49']
+  DEBUG   machine:tick          TICK: 314, PC: 49, ADDR: 78, MEM_OUT: 105, AC: 105, DR: 105 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 315, PC: 49, ADDR: 21, MEM_OUT: 0, AC: 105, DR: 105 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 316, PC: 49, ADDR: 21, MEM_OUT: 0, AC: 105, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 317, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 105, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 318, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 319, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 320, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 321, PC: 50, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 jl ['$54']
+  DEBUG   machine:tick          TICK: 322, PC: 50, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 jl ['$54']
+  DEBUG   machine:tick          TICK: 323, PC: 51, ADDR: 55, MEM_OUT: 99, AC: 1, DR: 1 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 324, PC: 51, ADDR: 55, MEM_OUT: 99, AC: 1, DR: 99 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 325, PC: 51, ADDR: 20, MEM_OUT: 105, AC: 1, DR: 99 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 326, PC: 51, ADDR: 20, MEM_OUT: 105, AC: 1, DR: 99 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 327, PC: 51, ADDR: 20, MEM_OUT: 105, AC: 99, DR: 99 movv ['$20', '$52']
+  DEBUG   machine:write         input: 'c'
+  DEBUG   machine:tick          TICK: 328, PC: 51, ADDR: 20, MEM_OUT: 99, AC: 99, DR: 99 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 329, PC: 52, ADDR: 20, MEM_OUT: 99, AC: 99, DR: 99 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 330, PC: 52, ADDR: 20, MEM_OUT: 99, AC: 99, DR: 99 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 331, PC: 52, ADDR: 79, MEM_OUT: 117, AC: 99, DR: 99 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 332, PC: 52, ADDR: 79, MEM_OUT: 117, AC: 99, DR: 99 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 333, PC: 52, ADDR: 79, MEM_OUT: 117, AC: 99, DR: 99 movv ['$69', '$20']
+  DEBUG   machine:write         output: 'Hello, Ali' << 'c'
+  DEBUG   machine:tick          TICK: 334, PC: 52, ADDR: 79, MEM_OUT: 99, AC: 99, DR: 99 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 335, PC: 53, ADDR: 79, MEM_OUT: 99, AC: 99, DR: 99 jp ['$49']
+  DEBUG   machine:tick          TICK: 336, PC: 49, ADDR: 79, MEM_OUT: 99, AC: 99, DR: 99 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 337, PC: 49, ADDR: 21, MEM_OUT: 0, AC: 99, DR: 99 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 338, PC: 49, ADDR: 21, MEM_OUT: 0, AC: 99, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 339, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 99, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 340, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 341, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 342, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 343, PC: 50, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 jl ['$54']
+  DEBUG   machine:tick          TICK: 344, PC: 50, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 jl ['$54']
+  DEBUG   machine:tick          TICK: 345, PC: 51, ADDR: 56, MEM_OUT: 101, AC: 1, DR: 1 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 346, PC: 51, ADDR: 56, MEM_OUT: 101, AC: 1, DR: 101 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 347, PC: 51, ADDR: 20, MEM_OUT: 99, AC: 1, DR: 101 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 348, PC: 51, ADDR: 20, MEM_OUT: 99, AC: 1, DR: 101 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 349, PC: 51, ADDR: 20, MEM_OUT: 99, AC: 101, DR: 101 movv ['$20', '$52']
+  DEBUG   machine:write         input: 'e'
+  DEBUG   machine:tick          TICK: 350, PC: 51, ADDR: 20, MEM_OUT: 101, AC: 101, DR: 101 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 351, PC: 52, ADDR: 20, MEM_OUT: 101, AC: 101, DR: 101 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 352, PC: 52, ADDR: 20, MEM_OUT: 101, AC: 101, DR: 101 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 353, PC: 52, ADDR: 80, MEM_OUT: 114, AC: 101, DR: 101 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 354, PC: 52, ADDR: 80, MEM_OUT: 114, AC: 101, DR: 101 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 355, PC: 52, ADDR: 80, MEM_OUT: 114, AC: 101, DR: 101 movv ['$69', '$20']
+  DEBUG   machine:write         output: 'Hello, Alic' << 'e'
+  DEBUG   machine:tick          TICK: 356, PC: 52, ADDR: 80, MEM_OUT: 101, AC: 101, DR: 101 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 357, PC: 53, ADDR: 80, MEM_OUT: 101, AC: 101, DR: 101 jp ['$49']
+  DEBUG   machine:tick          TICK: 358, PC: 49, ADDR: 80, MEM_OUT: 101, AC: 101, DR: 101 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 359, PC: 49, ADDR: 21, MEM_OUT: 0, AC: 101, DR: 101 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 360, PC: 49, ADDR: 21, MEM_OUT: 0, AC: 101, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 361, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 101, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 362, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 0 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 363, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 364, PC: 49, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 sub ['$21', '$22']
+  DEBUG   machine:tick          TICK: 365, PC: 50, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 jl ['$54']
+  DEBUG   machine:tick          TICK: 366, PC: 50, ADDR: 22, MEM_OUT: 1, AC: 1, DR: 1 jl ['$54']
+  DEBUG   machine:tick          TICK: 367, PC: 51, ADDR: 57, MEM_OUT: 0, AC: 1, DR: 1 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 368, PC: 51, ADDR: 57, MEM_OUT: 0, AC: 1, DR: 0 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 369, PC: 51, ADDR: 20, MEM_OUT: 101, AC: 1, DR: 0 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 370, PC: 51, ADDR: 20, MEM_OUT: 101, AC: 1, DR: 0 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 371, PC: 51, ADDR: 20, MEM_OUT: 101, AC: 0, DR: 0 movv ['$20', '$52']
+  DEBUG   machine:write         input: '\x00'
+  DEBUG   machine:tick          TICK: 372, PC: 51, ADDR: 20, MEM_OUT: 0, AC: 0, DR: 0 movv ['$20', '$52']
+  DEBUG   machine:tick          TICK: 373, PC: 52, ADDR: 20, MEM_OUT: 0, AC: 0, DR: 0 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 374, PC: 52, ADDR: 20, MEM_OUT: 0, AC: 0, DR: 0 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 375, PC: 52, ADDR: 81, MEM_OUT: 32, AC: 0, DR: 0 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 376, PC: 52, ADDR: 81, MEM_OUT: 32, AC: 0, DR: 0 movv ['$69', '$20']
+  DEBUG   machine:tick          TICK: 377, PC: 52, ADDR: 81, MEM_OUT: 32, AC: 0, DR: 0 movv ['$69', '$20']
+  INFO    machine:write         input_buffer: < Alice
+  WARNING machine:simulation    Input buffer is empty!
+  DEBUG   machine:tick          TICK: 378, PC: 54, ADDR: 19, MEM_OUT: 33, AC: 0, DR: 0 movv ['$69', '$19']
+  DEBUG   machine:tick          TICK: 379, PC: 54, ADDR: 19, MEM_OUT: 33, AC: 0, DR: 33 movv ['$69', '$19']
+  DEBUG   machine:tick          TICK: 380, PC: 54, ADDR: 81, MEM_OUT: 32, AC: 0, DR: 33 movv ['$69', '$19']
+  DEBUG   machine:tick          TICK: 381, PC: 54, ADDR: 81, MEM_OUT: 32, AC: 0, DR: 33 movv ['$69', '$19']
+  DEBUG   machine:tick          TICK: 382, PC: 54, ADDR: 81, MEM_OUT: 32, AC: 33, DR: 33 movv ['$69', '$19']
+  DEBUG   machine:write         output: 'Hello, Alice' << '!'
+  DEBUG   machine:tick          TICK: 383, PC: 54, ADDR: 81, MEM_OUT: 33, AC: 33, DR: 33 movv ['$69', '$19']
+  INFO    machine:simulation    output_buffer: > 'Hello, Alice!'

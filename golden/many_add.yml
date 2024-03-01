@@ -1,0 +1,97 @@
+in_source: |-
+  (
+    ( defvar a 1000 )
+    ( defvar b 2000 )
+    ( defvar c 3000 )
+    ( defvar d 4000 )
+    ( defvar e 10000 )
+    ( defvar f 10000 )
+    ( defvar r 0 )
+    ( setq r ( + a b c d e f ) )
+    ( print r )
+  )
+in_stdin: |-
+  foo
+out_code: |-
+  [{"opcode": "movv", "arg": ["$0", 1000]},
+   {"opcode": "movv", "arg": ["$1", 2000]},
+   {"opcode": "movv", "arg": ["$2", 3000]},
+   {"opcode": "movv", "arg": ["$3", 4000]},
+   {"opcode": "movv", "arg": ["$4", 10000]},
+   {"opcode": "movv", "arg": ["$5", 10000]},
+   {"opcode": "movv", "arg": ["$6", 0]},
+   {"opcode": "add", "arg": ["$0", "$1", "$2", "$3", "$4", "$5"]},
+   {"opcode": "mov", "arg": ["$6"]},
+   {"opcode": "movv", "arg": ["$69", "$6"]},
+   {"opcode": "halt"}]
+out_stdout: |
+  source LoC: 54 code instr: 11
+  ============================================================
+  30000
+  instr_counter: 10  ticks: 54
+out_log: |
+  DEBUG   machine:simulation    TICK: 0, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0 movv ['$0', 1000]
+  DEBUG   machine:tick          TICK: 1, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 0 movv ['$0', 1000]
+  DEBUG   machine:tick          TICK: 2, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 0, DR: 1000 movv ['$0', 1000]
+  DEBUG   machine:tick          TICK: 3, PC: 0, ADDR: 0, MEM_OUT: 0, AC: 1000, DR: 1000 movv ['$0', 1000]
+  DEBUG   machine:write         input: 1000
+  DEBUG   machine:tick          TICK: 4, PC: 0, ADDR: 0, MEM_OUT: 1000, AC: 1000, DR: 1000 movv ['$0', 1000]
+  DEBUG   machine:tick          TICK: 5, PC: 1, ADDR: 1, MEM_OUT: 0, AC: 1000, DR: 1000 movv ['$1', 2000]
+  DEBUG   machine:tick          TICK: 6, PC: 1, ADDR: 1, MEM_OUT: 0, AC: 1000, DR: 2000 movv ['$1', 2000]
+  DEBUG   machine:tick          TICK: 7, PC: 1, ADDR: 1, MEM_OUT: 0, AC: 2000, DR: 2000 movv ['$1', 2000]
+  DEBUG   machine:write         input: 2000
+  DEBUG   machine:tick          TICK: 8, PC: 1, ADDR: 1, MEM_OUT: 2000, AC: 2000, DR: 2000 movv ['$1', 2000]
+  DEBUG   machine:tick          TICK: 9, PC: 2, ADDR: 2, MEM_OUT: 0, AC: 2000, DR: 2000 movv ['$2', 3000]
+  DEBUG   machine:tick          TICK: 10, PC: 2, ADDR: 2, MEM_OUT: 0, AC: 2000, DR: 3000 movv ['$2', 3000]
+  DEBUG   machine:tick          TICK: 11, PC: 2, ADDR: 2, MEM_OUT: 0, AC: 3000, DR: 3000 movv ['$2', 3000]
+  DEBUG   machine:write         input: 3000
+  DEBUG   machine:tick          TICK: 12, PC: 2, ADDR: 2, MEM_OUT: 3000, AC: 3000, DR: 3000 movv ['$2', 3000]
+  DEBUG   machine:tick          TICK: 13, PC: 3, ADDR: 3, MEM_OUT: 0, AC: 3000, DR: 3000 movv ['$3', 4000]
+  DEBUG   machine:tick          TICK: 14, PC: 3, ADDR: 3, MEM_OUT: 0, AC: 3000, DR: 4000 movv ['$3', 4000]
+  DEBUG   machine:tick          TICK: 15, PC: 3, ADDR: 3, MEM_OUT: 0, AC: 4000, DR: 4000 movv ['$3', 4000]
+  DEBUG   machine:write         input: 4000
+  DEBUG   machine:tick          TICK: 16, PC: 3, ADDR: 3, MEM_OUT: 4000, AC: 4000, DR: 4000 movv ['$3', 4000]
+  DEBUG   machine:tick          TICK: 17, PC: 4, ADDR: 4, MEM_OUT: 0, AC: 4000, DR: 4000 movv ['$4', 10000]
+  DEBUG   machine:tick          TICK: 18, PC: 4, ADDR: 4, MEM_OUT: 0, AC: 4000, DR: 10000 movv ['$4', 10000]
+  DEBUG   machine:tick          TICK: 19, PC: 4, ADDR: 4, MEM_OUT: 0, AC: 10000, DR: 10000 movv ['$4', 10000]
+  DEBUG   machine:write         input: 10000
+  DEBUG   machine:tick          TICK: 20, PC: 4, ADDR: 4, MEM_OUT: 10000, AC: 10000, DR: 10000 movv ['$4', 10000]
+  DEBUG   machine:tick          TICK: 21, PC: 5, ADDR: 5, MEM_OUT: 0, AC: 10000, DR: 10000 movv ['$5', 10000]
+  DEBUG   machine:tick          TICK: 22, PC: 5, ADDR: 5, MEM_OUT: 0, AC: 10000, DR: 10000 movv ['$5', 10000]
+  DEBUG   machine:tick          TICK: 23, PC: 5, ADDR: 5, MEM_OUT: 0, AC: 10000, DR: 10000 movv ['$5', 10000]
+  DEBUG   machine:write         input: 10000
+  DEBUG   machine:tick          TICK: 24, PC: 5, ADDR: 5, MEM_OUT: 10000, AC: 10000, DR: 10000 movv ['$5', 10000]
+  DEBUG   machine:tick          TICK: 25, PC: 6, ADDR: 6, MEM_OUT: 0, AC: 10000, DR: 10000 movv ['$6', 0]
+  DEBUG   machine:tick          TICK: 26, PC: 6, ADDR: 6, MEM_OUT: 0, AC: 10000, DR: 0 movv ['$6', 0]
+  DEBUG   machine:tick          TICK: 27, PC: 6, ADDR: 6, MEM_OUT: 0, AC: 0, DR: 0 movv ['$6', 0]
+  DEBUG   machine:write         input: '\x00'
+  DEBUG   machine:tick          TICK: 28, PC: 6, ADDR: 6, MEM_OUT: 0, AC: 0, DR: 0 movv ['$6', 0]
+  DEBUG   machine:tick          TICK: 29, PC: 7, ADDR: 0, MEM_OUT: 1000, AC: 0, DR: 0 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 30, PC: 7, ADDR: 0, MEM_OUT: 1000, AC: 0, DR: 1000 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 31, PC: 7, ADDR: 1, MEM_OUT: 2000, AC: 0, DR: 1000 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 32, PC: 7, ADDR: 1, MEM_OUT: 2000, AC: 3000, DR: 1000 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 33, PC: 7, ADDR: 1, MEM_OUT: 2000, AC: 3000, DR: 3000 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 34, PC: 7, ADDR: 2, MEM_OUT: 3000, AC: 3000, DR: 3000 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 35, PC: 7, ADDR: 2, MEM_OUT: 3000, AC: 6000, DR: 3000 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 36, PC: 7, ADDR: 2, MEM_OUT: 3000, AC: 6000, DR: 6000 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 37, PC: 7, ADDR: 3, MEM_OUT: 4000, AC: 6000, DR: 6000 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 38, PC: 7, ADDR: 3, MEM_OUT: 4000, AC: 10000, DR: 6000 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 39, PC: 7, ADDR: 3, MEM_OUT: 4000, AC: 10000, DR: 10000 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 40, PC: 7, ADDR: 4, MEM_OUT: 10000, AC: 10000, DR: 10000 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 41, PC: 7, ADDR: 4, MEM_OUT: 10000, AC: 20000, DR: 10000 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 42, PC: 7, ADDR: 4, MEM_OUT: 10000, AC: 20000, DR: 20000 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 43, PC: 7, ADDR: 5, MEM_OUT: 10000, AC: 20000, DR: 20000 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 44, PC: 7, ADDR: 5, MEM_OUT: 10000, AC: 30000, DR: 20000 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 45, PC: 7, ADDR: 5, MEM_OUT: 10000, AC: 30000, DR: 20000 add ['$0', '$1', '$2', '$3', '$4', '$5']
+  DEBUG   machine:tick          TICK: 46, PC: 8, ADDR: 6, MEM_OUT: 0, AC: 30000, DR: 20000 mov ['$6']
+  DEBUG   machine:write         input: 30000
+  DEBUG   machine:tick          TICK: 47, PC: 8, ADDR: 6, MEM_OUT: 30000, AC: 30000, DR: 20000 mov ['$6']
+  DEBUG   machine:tick          TICK: 48, PC: 8, ADDR: 6, MEM_OUT: 30000, AC: 30000, DR: 20000 mov ['$6']
+  DEBUG   machine:tick          TICK: 49, PC: 9, ADDR: 6, MEM_OUT: 30000, AC: 30000, DR: 20000 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 50, PC: 9, ADDR: 6, MEM_OUT: 30000, AC: 30000, DR: 30000 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 51, PC: 9, ADDR: 69, MEM_OUT: 0, AC: 30000, DR: 30000 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 52, PC: 9, ADDR: 69, MEM_OUT: 0, AC: 30000, DR: 30000 movv ['$69', '$6']
+  DEBUG   machine:tick          TICK: 53, PC: 9, ADDR: 69, MEM_OUT: 0, AC: 30000, DR: 30000 movv ['$69', '$6']
+  DEBUG   machine:write         output: '' << 30000
+  DEBUG   machine:tick          TICK: 54, PC: 9, ADDR: 69, MEM_OUT: 30000, AC: 30000, DR: 30000 movv ['$69', '$6']
+  INFO    machine:simulation    output_buffer: > '30000'
