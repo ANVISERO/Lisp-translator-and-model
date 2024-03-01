@@ -30,7 +30,7 @@ def test_translator_and_machine(golden, caplog):
     # Создаём временную папку для тестирования приложения.
     with tempfile.TemporaryDirectory() as tmpdirname:
         # Готовим имена файлов для входных и выходных данных.
-        source = os.path.join(tmpdirname, "source.bf")
+        source = os.path.join(tmpdirname, "source.lisp")
         input_stream = os.path.join(tmpdirname, "input.txt")
         target = os.path.join(tmpdirname, "target.o")
 

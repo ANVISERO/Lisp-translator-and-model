@@ -1,24 +1,26 @@
 in_source: |-
-  ( defvar h " h " )
-  ( defvar e " e " )
-  ( defvar l " l " )
-  ( defvar o " o " )
-  ( defvar tab " " )
-  ( defvar w " w " )
-  ( defvar r " r " )
-  ( defvar d " d " )
+  (
+      ( defvar h " h " )
+      ( defvar e " e " )
+      ( defvar l " l " )
+      ( defvar o " o " )
+      ( defvar tab " " )
+      ( defvar w " w " )
+      ( defvar r " r " )
+      ( defvar d " d " )
 
-  ( format f h )
-  ( format f e )
-  ( format f l )
-  ( format f l )
-  ( format f o )
-  ( format f tab )
-  ( format f w )
-  ( format f o )
-  ( format f r )
-  ( format f l )
-  ( format f d )
+      ( print h )
+      ( print e )
+      ( print l )
+      ( print l )
+      ( print o )
+      ( print tab )
+      ( print w )
+      ( print o )
+      ( print r )
+      ( print l )
+      ( print d )
+  )
 in_stdin: |-
   foo
 out_code: |-
@@ -43,7 +45,7 @@ out_code: |-
    {"opcode": "movv", "arg": ["$69", "$7"]},
    {"opcode": "halt"}]
 out_stdout: |
-  source LoC: 110 code instr: 20
+  source LoC: 101 code instr: 20
   ============================================================
   hello world
   instr_counter: 19  ticks: 98

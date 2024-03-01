@@ -107,13 +107,6 @@ class DataPath:
                 raise EOFError()
             if self.acc > 128:
                 converted_data = []
-                out_end = self.output_buffer_begin + self.output_buffer_pointer - 1
-                output_data = self.data_memory[self.output_buffer_begin:out_end]
-                for value in output_data:
-                    if value > 128:
-                        converted_data.append(value)
-                    else:
-                        converted_data.append(chr(value))
                 logging.debug("output: %s << %s", repr("".join(converted_data)), self.acc)
             else:
                 logging.debug(
@@ -163,9 +156,6 @@ class ControlUnit:
         self._tick += 1
         logging.debug("%s", self)
 
-    def get_current_arg(self):
-        return self.current_arg
-
     def current_tick(self):
         return self._tick
 
@@ -181,7 +171,6 @@ class ControlUnit:
             self.program_counter_max = self.program_counter
 
     def decode_and_execute_instruction(self):
-        print(self.data_path.data_memory)
         instr = self.program[self.program_counter]
         if self.in_progress:
             opcode = self.OP
@@ -327,9 +316,6 @@ class ControlUnit:
         self.latch_program_counter(sel_next=False)
         self.tick()
 
-    def in_progress(self):
-        return self.in_progress
-
     def __repr__(self):
         state = "TICK: {}, PC: {}, ADDR: {}, MEM_OUT: {}, AC: {}, DR: {}".format(
             self._tick,
@@ -400,12 +386,12 @@ def simulation(code, input_tokens, input_buffer_begin, output_buffer_begin, data
     return "".join(converted_data), instr_counter, control_unit.current_tick()
 
 
-def main(code, inputfile):
+def main(file1: str, file2: str):
     """Функция запуска модели процессора. Параметры -- имена файлов с машинным
     кодом и с входными данными для симуляции.
     """
-    code = read_code(code)
-    with open(inputfile, encoding="utf-8") as file:
+    code = read_code(file1)
+    with open(file2, encoding="utf-8") as file:
         input_text = file.read()
         input_token = []
         for char in input_text:

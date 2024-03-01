@@ -33,7 +33,7 @@ class Term(namedtuple("Term", "pos symbol")):
     """
 
 
-def write_code(filename, code):
+def write_code(filename: str, code):
     """Записать машинный код в файл."""
     with open(filename, "w", encoding="utf-8") as file:
         buf = []
@@ -54,6 +54,6 @@ def read_code(filename):
         # Конвертация списка term в класс Term
         if "term" in instr:
             assert len(instr["term"]) == 3
-            instr["term"] = Term(instr["term"][0], instr["term"][1], instr["term"][2])
+            instr["term"] = Term(instr["term"][0], instr["term"][1])
 
     return code
